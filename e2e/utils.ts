@@ -4,6 +4,7 @@ import fs from 'fs-extra'
 import type { AggregatedResult, AssertionResult } from '@jest/test-result'
 
 const rootDir = path.resolve(__dirname, '..')
+const vscodeTestDir = path.resolve(rootDir, '.vscode-test')
 
 function sortByProperty<T>(property: keyof T): (a: T, b: T) => number {
   return (a, b) => {
@@ -63,8 +64,9 @@ function normalizeResults(results: AggregatedResult): AggregatedResult {
 }
 
 export async function prepareDir(cwd: string): Promise<void> {
+  await fs.ensureDir(vscodeTestDir)
   await fs.ensureSymlink(
-    path.relative(cwd, path.resolve(__dirname, '../.vscode-test')),
+    path.relative(cwd, vscodeTestDir),
     path.resolve(cwd, '.vscode-test'),
     'dir'
   )
