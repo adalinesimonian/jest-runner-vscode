@@ -16,5 +16,5 @@ describe('Tests that call VS Code commands', () => {
     }
     expect(json).toMatchSnapshot()
     expect(exitCode).toBe(0)
-  }, 30000)
+  }, 45000)
 })
