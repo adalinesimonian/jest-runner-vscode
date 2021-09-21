@@ -74,6 +74,10 @@ export async function prepareDir(cwd: string): Promise<void> {
   await execa('yarn', ['--cwd', cwd], {
     cwd,
     timeout: 30000,
+    env: {
+      YARN_ENABLE_INLINE_BUILDS: '1',
+      YARN_ENABLE_IMMUTABLE_INSTALLS: '0',
+    },
   })
 }
 
