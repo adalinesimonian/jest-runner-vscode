@@ -11,6 +11,8 @@ node_modules
 /dist
 tsconfig.tsbuildinfo
 e2e/**/yarn.lock
+e2e/**/.vscode-test
+e2e/**/.yarn
 
 # vscode binaries
 .vscode-test
