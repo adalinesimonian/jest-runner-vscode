@@ -1,0 +1,16 @@
+# yarn / packages
+/.yarn/*
+!/.yarn/patches
+!/.yarn/plugins
+!/.yarn/releases
+!/.yarn/sdks
+/.pnp.*
+node_modules
+
+# build artifacts
+/dist
+tsconfig.tsbuildinfo
+e2e/**/yarn.lock
+
+# vscode binaries
+.vscode-test

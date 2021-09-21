@@ -1,0 +1,51 @@
+name: "\U0001F41B Bug Report"
+description: File a bug report
+title: '[Bug]: '
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug report!
+
+        If instead you are looking for an answer to a question or help using jest-runner-vscode, [start a discussion](https://github.com/adalinesimonian/jest-runner-vscode/discussions/new?category=q-a) instead.
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js Version
+      description: Get the version of Node.js you're using by running `node -v`
+      placeholder: ex. v16.9.1
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: How did you encounter this bug?
+      description: Describe how this bug can be reproduced.
+      placeholder: ex. Using ts-jest causes test suites to fail.
+    validations:
+      required: true
+  - type: textarea
+    id: actual-behaviour
+    attributes:
+      label: Actual Behaviour
+      description: What happens currently and how is it wrong?
+      placeholder: ex. Tests pass but the suite fails.
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behaviour
+    attributes:
+      label: Expected Behaviour
+      description: What did you expect to happen?
+      placeholder: ex. Test suite passes.
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/adalinesimonian/jest-runner-vscode/blob/main/CODE_OF_CONDUCT.md).
+      options:
+        - label: I agree to follow jest-runner-vscode's Code of Conduct
+          required: true

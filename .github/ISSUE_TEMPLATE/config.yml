@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: ⁉️ Need help using jest-runner-vscode?
+    url: https://github.com/adalinesimonian/jest-runner-vscode/discussions
+    about: Search for or start a discussion on GitHub related to your question.

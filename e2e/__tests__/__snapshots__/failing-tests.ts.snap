@@ -1,0 +1,84 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Failing tests should fail tests 1`] = `
+Object {
+  "numFailedTestSuites": 2,
+  "numFailedTests": 2,
+  "numPassedTestSuites": 0,
+  "numPassedTests": 0,
+  "numPendingTestSuites": 0,
+  "numPendingTests": 0,
+  "numRuntimeErrorTestSuites": 1,
+  "numTodoTests": 0,
+  "numTotalTestSuites": 2,
+  "numTotalTests": 2,
+  "openHandles": Array [],
+  "snapshot": Object {
+    "added": 0,
+    "didUpdate": false,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": Array [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": Array [],
+    "unmatched": 0,
+    "updated": 0,
+  },
+  "startTime": undefined,
+  "success": false,
+  "testResults": Array [
+    Object {
+      "assertionResults": Array [
+        Object {
+          "ancestorTitles": Array [
+            "Describe",
+          ],
+          "failureMessages": Array [
+            "",
+          ],
+          "fullName": "Describe should test",
+          "location": null,
+          "status": "failed",
+          "title": "should test",
+        },
+        Object {
+          "ancestorTitles": Array [
+            "Describe",
+          ],
+          "failureMessages": Array [
+            "",
+          ],
+          "fullName": "Describe should test async",
+          "location": null,
+          "status": "failed",
+          "title": "should test async",
+        },
+      ],
+      "endTime": undefined,
+      "failureMessage": "",
+      "message": "",
+      "name": "/e2e/failing-tests/__tests__/failing.js",
+      "startTime": undefined,
+      "status": "failed",
+      "summary": "",
+    },
+    Object {
+      "assertionResults": Array [],
+      "coverage": Object {},
+      "endTime": undefined,
+      "failureMessage": "",
+      "message": "",
+      "name": "/e2e/failing-tests/__tests__/invalid.js",
+      "startTime": undefined,
+      "status": "failed",
+      "summary": "",
+    },
+  ],
+  "wasInterrupted": false,
+}
+`;

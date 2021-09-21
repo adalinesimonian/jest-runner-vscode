@@ -1,0 +1,58 @@
+{
+  "name": "jest-runner-vscode",
+  "description": "Jest runner for testing VS Code extensions",
+  "author": {
+    "name": "Adaline Simonian",
+    "email": "adalinesimonian@gmail.com",
+    "url": "https://github.com/adalinesimonian"
+  },
+  "license": "ISC",
+  "homepage": "https://github.com/adalinesimonian/jest-runner-vscode#readme",
+  "repository": "https://github.com/adalinesimonian/jest-runner-vscode",
+  "bugs": "https://github.com/adalinesimonian/jest-runner-vscode/issues",
+  "main": "dist/runner.js",
+  "types": "dist/runner.d.ts",
+  "scripts": {
+    "build": "yarn clean && tsc",
+    "clean": "tsc --build --clean",
+    "format": "run-s \"format:*\"",
+    "format:eslint": "eslint --ext .js,.ts --fix .",
+    "format:prettier": "prettier --write .",
+    "lint": "run-s \"lint:*\"",
+    "lint:eslint": "eslint --ext .js,.ts .",
+    "lint:prettier": "prettier --check .",
+    "lint:types": "tsc --noEmit",
+    "prepack": "yarn build",
+    "test": "node clean-e2e.mjs && jest -i"
+  },
+  "packageManager": "yarn@3.0.2",
+  "engines": {
+    "vscode": ">=1.56.0",
+    "node": ">=14.16.0"
+  },
+  "dependencies": {
+    "@jest/core": "^27.2.1",
+    "@vscode/test-electron": "^1.6.2",
+    "cosmiconfig": "^7.0.1",
+    "jest-cli": "^27.2.1",
+    "jest-environment-node": "^27.2.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "9.0.12",
+    "@types/jest": "27.0.1",
+    "@types/node": "14.14.45",
+    "@types/vscode": "1.56.0",
+    "@typescript-eslint/eslint-plugin": "4.31.1",
+    "@typescript-eslint/parser": "4.31.1",
+    "eslint": "7.32.0",
+    "eslint-config-prettier": "8.3.0",
+    "execa": "5.1.1",
+    "fast-glob": "3.2.7",
+    "fs-extra": "10.0.0",
+    "jest": "27.2.0",
+    "npm-run-all": "4.1.5",
+    "prettier": "2.4.0",
+    "ts-jest": "27.0.5",
+    "typescript": "4.4.3"
+  }
+}

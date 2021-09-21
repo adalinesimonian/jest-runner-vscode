@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "jest-runner-vscode": "link:../../"
+  }
+}

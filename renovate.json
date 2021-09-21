@@ -1,0 +1,9 @@
+{
+  "extends": ["config:base"],
+  "packageRules": [
+    {
+      "matchPackageNames": ["@types/node"],
+      "allowedVersions": "14.14.45 - 14.16.0"
+    }
+  ]
+}

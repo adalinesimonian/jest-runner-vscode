@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Snapshot tests should pass tests 1`] = `
+Object {
+  "numFailedTestSuites": 0,
+  "numFailedTests": 0,
+  "numPassedTestSuites": 1,
+  "numPassedTests": 2,
+  "numPendingTestSuites": 0,
+  "numPendingTests": 0,
+  "numRuntimeErrorTestSuites": 0,
+  "numTodoTests": 0,
+  "numTotalTestSuites": 1,
+  "numTotalTests": 2,
+  "openHandles": Array [],
+  "snapshot": Object {
+    "added": 0,
+    "didUpdate": false,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": Array [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 2,
+    "total": 2,
+    "unchecked": 0,
+    "uncheckedKeysByFile": Array [],
+    "unmatched": 0,
+    "updated": 0,
+  },
+  "startTime": undefined,
+  "success": true,
+  "testResults": Array [
+    Object {
+      "assertionResults": Array [
+        Object {
+          "ancestorTitles": Array [
+            "Describe",
+          ],
+          "failureMessages": Array [],
+          "fullName": "Describe should test",
+          "location": null,
+          "status": "passed",
+          "title": "should test",
+        },
+        Object {
+          "ancestorTitles": Array [
+            "Describe",
+          ],
+          "failureMessages": Array [],
+          "fullName": "Describe should test async",
+          "location": null,
+          "status": "passed",
+          "title": "should test async",
+        },
+      ],
+      "endTime": undefined,
+      "failureMessage": "",
+      "message": "",
+      "name": "/e2e/snapshots/__tests__/test.js",
+      "startTime": undefined,
+      "status": "passed",
+      "summary": "",
+    },
+  ],
+  "wasInterrupted": false,
+}
+`;

@@ -1,0 +1,13 @@
+# yarn / packages
+.yarn
+.pnp.*
+node_modules
+
+# build artifacts
+dist
+
+# invalid e2e tests
+e2e/failing-tests/__tests__/invalid.js
+
+# vscode binaries
+.vscode-test
