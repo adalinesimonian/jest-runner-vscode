@@ -1,6 +1,6 @@
 # jest-runner-vscode
 
-[![Build Status](https://github.com/adalinesimonian/jest-runner-vscode/actions/workflows/main-test.yml/badge.svg?branch=main)][build status] [![npm Version](https://img.shields.io/npm/v/jest-runner-vscode.svg)][npm]
+[![Build Status](https://github.com/adalinesimonian/jest-runner-vscode/actions/workflows/main-test.yml/badge.svg?branch=main)][build status] [![npm Version](https://img.shields.io/npm/v/jest-runner-vscode.svg)][npm] [![Change Log](https://img.shields.io/badge/Change%20Log-grey.svg)][change log]
 
 Runs extension tests in [VS Code] using [Jest].
 
@@ -105,6 +105,7 @@ Configuration files in nested folders inherit the parent folder's configuration.
 
 [build status]: https://github.com/adalinesimonian/jest-runner-vscode/actions/workflows/main-test.yml
 [npm]: https://www.npmjs.com/package/jest-runner-vscode
+[change log]: CHANGELOG.md
 [vs code]: https://code.visualstudio.com/
 [jest]: https://jestjs.io/
 [vscode-jest-test-runner]: https://github.com/bmealhouse/vscode-jest-test-runner
