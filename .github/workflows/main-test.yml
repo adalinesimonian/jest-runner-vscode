@@ -33,10 +33,10 @@ jobs:
       - name: Download VS Code
         run: yarn ci:download-vscode
 
-      - name: Run tests
+      - name: Run tests (Linux)
         if: runner.os == 'Linux'
         run: xvfb-run -a yarn test
 
-      - name: Run tests
+      - name: Run tests (non-Linux)
         if: runner.os != 'Linux'
         run: yarn test
