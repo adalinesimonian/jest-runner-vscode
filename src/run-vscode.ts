@@ -1,6 +1,7 @@
 import type { RemoteTestOptions, RemoteTestResults } from './types'
 import cp from 'child_process'
 import console from 'console'
+import readline from 'readline'
 
 export default function runVSCode(
   vscodePath: string,
@@ -11,10 +12,9 @@ export default function runVSCode(
   return new Promise<RemoteTestResults | undefined>(resolve => {
     let results: RemoteTestResults | undefined = undefined
 
-    const log =
+    const useStdErr =
       options.globalConfig.json || options.globalConfig.useStderr
-        ? console.error
-        : console.log
+    const log = useStdErr ? console.error : console.log
     const silent = options.globalConfig.silent
 
     const environment = {
@@ -25,20 +25,22 @@ export default function runVSCode(
 
     const vscode = cp.spawn(vscodePath, args, { env: environment })
 
-    vscode.stdout.on('data', async data => {
-      const output = (data.toString() as string).replace(
-        /\[jest-runner-vscode\] [^\n]+\n/g,
-        match => {
-          results = JSON.parse(match.slice(21))
-          return ''
-        }
-      )
+    const stdoutReader = readline.createInterface({
+      input: vscode.stdout,
+      terminal: true,
+    })
+
+    stdoutReader.on('line', line => {
+      const output = line.replace(/^\[jest-runner-vscode\] .+$/, match => {
+        results = JSON.parse(match.slice(21))
+        return ''
+      })
       silent || log(output)
     })
 
-    vscode.stderr.on('data', data => {
-      silent || console.error(data.toString())
-    })
+    if (!silent) {
+      vscode.stderr.pipe(process.stderr)
+    }
 
     vscode.on('error', data => {
       results = { is: 'error', error: data, exitCode: null }
@@ -68,11 +70,11 @@ export default function runVSCode(
       } else {
         silent || log(message)
       }
-
-      resolve(results)
     }
 
     vscode.on('exit', onExit)
     vscode.on('close', onExit)
+
+    stdoutReader.on('close', () => resolve(results))
   })
 }
