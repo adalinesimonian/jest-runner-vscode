@@ -109,4 +109,4 @@ Configuration files in nested folders inherit the parent folder's configuration.
 [jest]: https://jestjs.io/
 [vscode-jest-test-runner]: https://github.com/bmealhouse/vscode-jest-test-runner
 [node.js]: https://nodejs.org/
-[open an issue]: https://github.com/adalinesimonian/jest-runner-vscode/issues/new
+[open an issue]: https://github.com/adalinesimonian/jest-runner-vscode/issues/new/choose
