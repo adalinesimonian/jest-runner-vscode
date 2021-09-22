@@ -2,7 +2,11 @@
 
 Runs extension tests in [VS Code] using [Jest].
 
-> **Note**: This extension is in its early stages of development and is subject to change. Contributions and suggestions are welcome!
+> **Note**: This runner is in its early stages of development and is subject to change. Contributions and suggestions are welcome!
+
+> **Note**: Versions 1.x and earlier of this package on npm are an entirely different package, a library for running jest within a VS Code process, that was moved to [vscode-jest-test-runner]. The library under the old name was kept on npm so that existing projects don't break their test runs, but it is no longer maintained.
+>
+> If you are using the old version of the npm package, either migrate to this Jest runner or switch your dependencies to the [vscode-jest-test-runner] package.
 
 ## Installation
 
@@ -97,4 +101,5 @@ Configuration files in nested folders inherit the parent folder's configuration.
 
 [vs code]: https://code.visualstudio.com/
 [jest]: https://jestjs.io/
+[vscode-jest-test-runner]: https://github.com/bmealhouse/vscode-jest-test-runner
 [open an issue]: https://github.com/adalinesimonian/jest-runner-vscode/issues/new
