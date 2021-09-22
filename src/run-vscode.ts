@@ -47,12 +47,23 @@ export default function runVSCode(
     })
 
     let exited = false
+    let streamClosed = false
+
+    stdoutReader.on('close', () => {
+      streamClosed = true
+      if (exited) {
+        resolve(results)
+      }
+    })
 
     const onExit = (
       code: number | null,
       signal: NodeJS.Signals | null
     ): void => {
       if (exited) {
+        if (streamClosed) {
+          resolve(results)
+        }
         return
       }
       exited = true
@@ -74,7 +85,5 @@ export default function runVSCode(
 
     vscode.on('exit', onExit)
     vscode.on('close', onExit)
-
-    stdoutReader.on('close', () => resolve(results))
   })
 }
