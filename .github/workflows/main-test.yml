@@ -43,6 +43,15 @@ jobs:
       - name: Build project
         run: yarn build
 
+      - name: Cache VS Code binaries
+        uses: actions/cache@v2
+        id: vscode-cache
+        with:
+          path: .vscode-test
+          key: ${{ runner.os }}-vscode-${{ hashFiles('e2e/jest-runner-vscode.config.js') }}
+          restore-keys: |
+            ${{ runner.os }}-vscode-
+
       - name: Download VS Code
         run: yarn ci:download-vscode
 
