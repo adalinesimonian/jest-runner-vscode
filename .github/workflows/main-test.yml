@@ -30,6 +30,9 @@ jobs:
       - name: Build project
         run: yarn build
 
+      - name: Download VS Code
+        run: yarn ci:download-vscode
+
       - name: Run tests
         if: runner.os == 'Linux'
         run: xvfb-run -a yarn test
