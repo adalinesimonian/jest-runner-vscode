@@ -1,5 +1,7 @@
 # jest-runner-vscode
 
+[![Build Status](https://github.com/adalinesimonian/jest-runner-vscode/actions/workflows/main-test.yml/badge.svg?branch=main)][build status] [![npm Version](https://img.shields.io/npm/v/jest-runner-vscode.svg)][npm]
+
 Runs extension tests in [VS Code] using [Jest].
 
 > **Note**: This runner is in its early stages of development and is subject to change. Contributions and suggestions are welcome!
@@ -9,6 +11,8 @@ Runs extension tests in [VS Code] using [Jest].
 > If you are using the old version of the npm package, either migrate to this Jest runner or switch your dependencies to the [vscode-jest-test-runner] package.
 
 ## Installation
+
+Requires [Node.js] 14.x or later. Project is tested on VS Code 1.56.2.
 
 ```shell
 $ yarn add -D jest-runner-vscode
@@ -99,7 +103,10 @@ Configuration files in nested folders inherit the parent folder's configuration.
 
 [ISC](LICENCE)
 
+[build status]: https://github.com/adalinesimonian/jest-runner-vscode/actions/workflows/main-test.yml
+[npm]: https://www.npmjs.com/package/jest-runner-vscode
 [vs code]: https://code.visualstudio.com/
 [jest]: https://jestjs.io/
 [vscode-jest-test-runner]: https://github.com/bmealhouse/vscode-jest-test-runner
+[node.js]: https://nodejs.org/
 [open an issue]: https://github.com/adalinesimonian/jest-runner-vscode/issues/new
