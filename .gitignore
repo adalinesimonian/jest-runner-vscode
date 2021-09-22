@@ -13,6 +13,7 @@ tsconfig.tsbuildinfo
 e2e/**/yarn.lock
 e2e/**/.vscode-test
 e2e/**/.yarn
+package.tgz
 
 # vscode binaries
 .vscode-test
