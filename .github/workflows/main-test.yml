@@ -31,4 +31,9 @@ jobs:
         run: yarn build
 
       - name: Run tests
+        if: runner.os == 'Linux'
+        run: xvfb-run -a yarn test
+
+      - name: Run tests
+        if: runner.os != 'Linux'
         run: yarn test
