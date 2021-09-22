@@ -4,6 +4,10 @@
     {
       "matchPackageNames": ["@types/node"],
       "allowedVersions": "14.14.45 - 14.16.0"
+    },
+    {
+      "matchPackageNames": ["@types/vscode"],
+      "allowedVersions": "~1.56.0"
     }
   ]
 }
