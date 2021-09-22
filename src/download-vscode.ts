@@ -13,12 +13,20 @@ export default async function downloadVSCode(
   useStdErr = false
 ): Promise<string> {
   let nullStream: stream.Writable | undefined
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const stdoutDescriptor = Object.getOwnPropertyDescriptor(process, 'stdout')!
 
   if (silent) {
     nullStream = new stream.Writable({ write: () => undefined })
     global.console = new Console(nullStream)
+    Object.defineProperty(process, 'stdout', {
+      value: nullStream,
+    })
   } else if (useStdErr) {
     global.console = new Console(process.stderr)
+    Object.defineProperty(process, 'stdout', {
+      value: process.stderr,
+    })
   }
 
   const vscodePath = await downloadAndUnzipVSCode(version, platform)
@@ -28,6 +36,7 @@ export default async function downloadVSCode(
   }
   if (silent || useStdErr) {
     global.console = console
+    Object.defineProperty(process, 'stdout', stdoutDescriptor)
   }
 
   return vscodePath
