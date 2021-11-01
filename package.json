@@ -11,6 +11,7 @@
   "homepage": "https://github.com/adalinesimonian/jest-runner-vscode#readme",
   "repository": "https://github.com/adalinesimonian/jest-runner-vscode",
   "bugs": "https://github.com/adalinesimonian/jest-runner-vscode/issues",
+  "funding": "https://github.com/sponsors/adalinesimonian",
   "main": "dist/runner.js",
   "types": "dist/runner.d.ts",
   "scripts": {
