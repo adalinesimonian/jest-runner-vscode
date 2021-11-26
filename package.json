@@ -28,7 +28,7 @@
     "test": "node clean-e2e.mjs && jest -i",
     "ci:download-vscode": "node ci-download-vscode.mjs"
   },
-  "packageManager": "yarn@3.1.0",
+  "packageManager": "yarn@3.1.1",
   "engines": {
     "vscode": ">=1.56.0",
     "node": ">=14.16.0"
