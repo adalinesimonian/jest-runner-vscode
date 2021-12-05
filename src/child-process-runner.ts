@@ -31,10 +31,7 @@ export async function run(): Promise<void> {
 
   await new Promise<void>(resolve =>
     ipc.connectTo(IPC_CHANNEL, () => {
-      ipc.of[IPC_CHANNEL].on('connect', () => {
-        console.log(`Connected to ${IPC_CHANNEL}`)
-        resolve()
-      })
+      ipc.of[IPC_CHANNEL].on('connect', resolve)
     })
   )
 
