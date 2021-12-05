@@ -1,9 +1,11 @@
 import type { RemoteTestOptions, RemoteTestResults } from './types'
 import * as jest from '@jest/core'
-import console from 'console'
+import type { buildArgv as buildArgvType } from 'jest-cli/build/cli/index'
 import vscode from 'vscode'
 import path from 'path'
-import type { buildArgv as buildArgvType } from 'jest-cli/build/cli/index'
+import process from 'process'
+import { IPC } from 'node-ipc'
+import console from 'console'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const buildArgv: typeof buildArgvType = require(path.resolve(
@@ -16,14 +18,36 @@ const vscodeModulePath = require.resolve('./jest-vscode-module')
 const moduleNameMapper = JSON.stringify({ '^vscode$': vscodeModulePath })
 
 export async function run(): Promise<void> {
+  const { IPC_CHANNEL, PARENT_JEST_OPTIONS } = process.env
+
+  if (!IPC_CHANNEL) {
+    throw new Error('IPC_CHANNEL is not defined')
+  }
+
+  const ipc = new IPC()
+
+  ipc.config.silent = true
+  ipc.config.id = `jest-runner-vscode-client-${process.pid}`
+
+  await new Promise<void>(resolve =>
+    ipc.connectTo(IPC_CHANNEL, () => {
+      ipc.of[IPC_CHANNEL].on('connect', () => {
+        console.log(`Connected to ${IPC_CHANNEL}`)
+        resolve()
+      })
+    })
+  )
+
+  const disconnected = new Promise<void>(resolve =>
+    ipc.of[IPC_CHANNEL].on('disconnect', resolve)
+  )
+
   let response: RemoteTestResults
   try {
-    if (!process.env.PARENT_JEST_OPTIONS) {
+    if (!PARENT_JEST_OPTIONS) {
       throw new Error('PARENT_JEST_OPTIONS is not defined')
     }
-    const options: RemoteTestOptions = JSON.parse(
-      process.env.PARENT_JEST_OPTIONS
-    )
+    const options: RemoteTestOptions = JSON.parse(PARENT_JEST_OPTIONS)
 
     const jestOptions = buildArgv([
       '-i',
@@ -53,7 +77,8 @@ export async function run(): Promise<void> {
     }
   }
 
-  console.log(`[jest-runner-vscode] ${JSON.stringify(response)}\n`)
-
+  ipc.of[IPC_CHANNEL].emit('test-results', response)
+  ipc.disconnect(IPC_CHANNEL)
+  await disconnected
   await vscode.commands.executeCommand('workbench.action.closeWindow')
 }

@@ -2,8 +2,10 @@ import type { Config } from '@jest/types'
 import type * as JestRunner from 'jest-runner'
 import type { TestResult as JestTestResult } from '@jest/types'
 import type { TestResult } from '@jest/test-result'
+import { IPC } from 'node-ipc'
 import type { RunnerOptions } from './types'
 import path from 'path'
+import process from 'process'
 import { cosmiconfig } from 'cosmiconfig'
 import downloadVSCode from './download-vscode'
 import runVSCode from './run-vscode'
@@ -64,9 +66,21 @@ export default class VSCodeTestRunner {
       }
     }
 
+    // Start IPC server.
+    const ipc = new IPC()
+
+    ipc.config.silent = true
+    ipc.config.id = `jest-runner-vscode-server-${process.pid}`
+
+    await new Promise<void>(resolve => {
+      ipc.serve(resolve)
+      ipc.server.start()
+    })
+
     // Run each group of tests in its own VS Code process.
     for (const [testDir, testGroup] of testsByDir.entries()) {
       if (watcher.isInterrupted()) {
+        ipc.server.stop()
         throw Object.assign(new Error(), { name: 'CancelRun' })
       }
 
@@ -113,7 +127,8 @@ export default class VSCodeTestRunner {
             workspacePath: this._globalConfig.rootDir,
             options,
             testPaths: testGroup.map(test => test.path),
-          }
+          },
+          ipc
         )
 
         if (!testResults) {
@@ -164,5 +179,7 @@ export default class VSCodeTestRunner {
         }
       }
     }
+
+    ipc.server.stop()
   }
 }

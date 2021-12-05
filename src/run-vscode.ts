@@ -1,15 +1,16 @@
 import type { RemoteTestOptions, RemoteTestResults } from './types'
 import cp from 'child_process'
 import console from 'console'
-import readline from 'readline'
+import type { IPC } from 'node-ipc'
 
-export default function runVSCode(
+export default async function runVSCode(
   vscodePath: string,
   args: string[],
   env: Record<string, string> | undefined,
-  options: RemoteTestOptions
+  options: RemoteTestOptions,
+  ipc: InstanceType<typeof IPC>
 ): Promise<RemoteTestResults | undefined> {
-  return new Promise<RemoteTestResults | undefined>(resolve => {
+  return await new Promise<RemoteTestResults | undefined>(resolve => {
     let results: RemoteTestResults | undefined = undefined
 
     const useStdErr =
@@ -21,24 +22,19 @@ export default function runVSCode(
       ...process.env,
       ...env,
       PARENT_JEST_OPTIONS: JSON.stringify(options),
+      IPC_CHANNEL: ipc.config.id,
     }
+
+    const onTestResults = (response: RemoteTestResults) => {
+      results = response
+    }
+
+    ipc.server.on('test-results', onTestResults)
 
     const vscode = cp.spawn(vscodePath, args, { env: environment })
 
-    const stdoutReader = readline.createInterface({
-      input: vscode.stdout,
-      terminal: true,
-    })
-
-    stdoutReader.on('line', line => {
-      const output = line.replace(/^\[jest-runner-vscode\] .+$/, match => {
-        results = JSON.parse(match.slice(21))
-        return ''
-      })
-      silent || log(output)
-    })
-
     if (!silent) {
+      vscode.stdout.pipe(process.stdout)
       vscode.stderr.pipe(process.stderr)
     }
 
@@ -47,23 +43,12 @@ export default function runVSCode(
     })
 
     let exited = false
-    let streamClosed = false
 
-    stdoutReader.on('close', () => {
-      streamClosed = true
-      if (exited) {
-        resolve(results)
-      }
-    })
-
-    const onExit = (
+    const onExit = async (
       code: number | null,
       signal: NodeJS.Signals | null
-    ): void => {
+    ): Promise<void> => {
       if (exited) {
-        if (streamClosed) {
-          resolve(results)
-        }
         return
       }
       exited = true
@@ -81,6 +66,10 @@ export default function runVSCode(
       } else {
         silent || log(message)
       }
+
+      ipc.server.off('test-results', onTestResults)
+
+      resolve(results)
     }
 
     vscode.on('exit', onExit)

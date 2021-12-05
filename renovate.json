@@ -8,6 +8,10 @@
     {
       "matchPackageNames": ["@types/vscode"],
       "allowedVersions": "~1.56.0"
+    },
+    {
+      "matchPackageNames": ["node-ipc", "@types/node-ipc"],
+      "allowedVersions": "^9.0.0"
     }
   ]
 }
