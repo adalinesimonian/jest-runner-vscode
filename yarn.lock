@@ -1057,7 +1057,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node-ipc@npm:^9.2.0":
+"@types/node-ipc@npm:9.2.0":
   version: 9.2.0
   resolution: "@types/node-ipc@npm:9.2.0"
   dependencies:
@@ -4129,7 +4129,7 @@ fsevents@^2.3.2:
     "@types/fs-extra": 9.0.13
     "@types/jest": 27.0.3
     "@types/node": 14.14.45
-    "@types/node-ipc": ^9.2.0
+    "@types/node-ipc": 9.2.0
     "@types/vscode": 1.56.0
     "@typescript-eslint/eslint-plugin": 5.5.0
     "@typescript-eslint/parser": 5.5.0
