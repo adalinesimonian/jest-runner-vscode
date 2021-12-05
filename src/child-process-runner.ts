@@ -5,7 +5,6 @@ import vscode from 'vscode'
 import path from 'path'
 import process from 'process'
 import { IPC } from 'node-ipc'
-import console from 'console'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const buildArgv: typeof buildArgvType = require(path.resolve(
