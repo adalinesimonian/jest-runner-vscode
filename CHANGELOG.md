@@ -1,10 +1,17 @@
 # Change Log
 
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
 ## [v2.1.0](https://github.com/adalinesimonian/jest-runner-vscode/compare/v2.0.0...v2.1.0) (2021-12-05)
 
 ### Added
 
 - Test results are now reported per test file instead of per folder. ([#26](https://github.com/adalinesimonian/jest-runner-vscode/issues/26))
+- Console output can now be filtered to output made by tests that use `console.log`, `.error`, `.warn`, `.info`, or `.dir`. ([#43](https://github.com/adalinesimonian/jest-runner-vscode/pull/43))
 
 ### Changed
 
