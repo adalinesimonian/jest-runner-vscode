@@ -15,6 +15,7 @@ export interface RunnerOptions {
   extensionDevelopmentPath?: string
   workspaceDir?: string
   openInFolder?: boolean
+  filterOutput?: boolean
 }
 
 export interface RemoteTestOptions {

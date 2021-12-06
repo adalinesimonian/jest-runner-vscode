@@ -1,18 +1,35 @@
-import type { RemoteTestOptions, RemoteTestResults } from './types'
+import type { RemoteTestOptions } from './types'
+import type { TestResult, SerializableError } from '@jest/test-result'
+import type { Test } from '@jest/reporters/build/types'
+import type * as JestRunner from 'jest-runner'
 import cp from 'child_process'
 import console from 'console'
 import type { IPC } from 'node-ipc'
 
-export default async function runVSCode(
-  vscodePath: string,
-  args: string[],
-  env: Record<string, string> | undefined,
-  options: RemoteTestOptions,
+export default async function runVSCode({
+  vscodePath,
+  args,
+  env,
+  options,
+  ipc,
+  tests,
+  filterOutput,
+  onStart,
+  onResult,
+  onFailure,
+}: {
+  vscodePath: string
+  args: string[]
+  env?: Record<string, string>
+  options: RemoteTestOptions
   ipc: InstanceType<typeof IPC>
-): Promise<RemoteTestResults | undefined> {
-  return await new Promise<RemoteTestResults | undefined>(resolve => {
-    let results: RemoteTestResults | undefined = undefined
-
+  tests: Test[]
+  filterOutput?: boolean
+  onStart: JestRunner.OnTestStart
+  onResult: JestRunner.OnTestSuccess
+  onFailure: JestRunner.OnTestFailure
+}): Promise<void> {
+  return await new Promise<void>(resolve => {
     const useStdErr =
       options.globalConfig.json || options.globalConfig.useStderr
     const log = useStdErr ? console.error : console.log
@@ -25,21 +42,88 @@ export default async function runVSCode(
       IPC_CHANNEL: ipc.config.id,
     }
 
-    const onTestResults = (response: RemoteTestResults) => {
-      results = response
+    const testsByPath = new Map<string, Test>()
+
+    for (const test of tests) {
+      testsByPath.set(test.path, test)
     }
 
-    ipc.server.on('test-results', onTestResults)
+    const completedTests = new Set<Test>()
+
+    const onTestFileResult = ({
+      test,
+      testResult,
+    }: {
+      test: Test
+      testResult: TestResult
+    }) => {
+      const matchingTest = testsByPath.get(test.path)
+      if (!matchingTest) {
+        return
+      }
+      completedTests.add(matchingTest)
+      if (testResult.testExecError) {
+        const error: SerializableError = Object.assign(
+          new Error(
+            testResult.testExecError.message ??
+              (testResult.testExecError as any).diagnosticText ??
+              testResult.failureMessage?.replace(/^[^\n]+\n\n?/, '')
+          ),
+          { code: undefined, stack: undefined, type: undefined },
+          testResult.testExecError
+        )
+
+        onFailure(matchingTest, error)
+      } else {
+        onResult(matchingTest, testResult)
+      }
+    }
+
+    const onTestStart = ({ test }: { test: Test }) => {
+      const matchingTest = testsByPath.get(test.path)
+      if (!matchingTest) {
+        return
+      }
+      onStart(matchingTest)
+    }
+
+    const onStdout = (str: string) => {
+      if (!silent) {
+        process.stdout.write(`${str}\n`)
+      }
+    }
+
+    const onStderr = (str: string) => {
+      if (!silent) {
+        process.stderr.write(`${str}\n`)
+      }
+    }
+
+    let childError: Error | undefined
+
+    const onError = (error: Error) => {
+      childError = error
+      silent || log(error.stack)
+    }
+
+    ipc.server.on('testFileResult', onTestFileResult)
+    ipc.server.on('testStart', onTestStart)
+    ipc.server.on('testFileStart', onTestStart)
+    ipc.server.on('stdout', onStdout)
+    ipc.server.on('stderr', onStderr)
+    ipc.server.on('error', onError)
 
     const vscode = cp.spawn(vscodePath, args, { env: environment })
 
-    if (!silent) {
+    if (!silent && !filterOutput) {
       vscode.stdout.pipe(process.stdout)
       vscode.stderr.pipe(process.stderr)
     }
 
-    vscode.on('error', data => {
-      results = { is: 'error', error: data, exitCode: null }
+    let vscodeError: Error | undefined
+
+    vscode.on('error', error => {
+      vscodeError = error
     })
 
     let exited = false
@@ -58,18 +142,41 @@ export default async function runVSCode(
 
       if (typeof code !== 'number' || code !== 0) {
         silent || console.error(message)
-        if (results && results.is === 'error') {
-          results.exitCode = exit
-        } else {
-          results = { is: 'error', error: new Error(message), exitCode: exit }
+        const error = vscodeError ?? childError ?? new Error(message)
+
+        for (const test of tests) {
+          const completed = completedTests.has(test)
+
+          if (!completed) {
+            await onFailure(test, error as SerializableError)
+          }
         }
       } else {
         silent || log(message)
+
+        for (const test of tests) {
+          const completed = completedTests.has(test)
+
+          if (!completed) {
+            await onFailure(
+              test,
+              (childError ??
+                new Error(
+                  `No test result returned for ${test.path}`
+                )) as SerializableError
+            )
+          }
+        }
       }
 
-      ipc.server.off('test-results', onTestResults)
+      ipc.server.off('testFileResult', onTestFileResult)
+      ipc.server.off('testStart', onTestStart)
+      ipc.server.off('testFileStart', onTestStart)
+      ipc.server.off('stdout', onStdout)
+      ipc.server.off('stderr', onStderr)
+      ipc.server.off('error', onError)
 
-      resolve(results)
+      resolve()
     }
 
     vscode.on('exit', onExit)

@@ -1,7 +1,5 @@
 import type { Config } from '@jest/types'
 import type * as JestRunner from 'jest-runner'
-import type { TestResult as JestTestResult } from '@jest/types'
-import type { TestResult } from '@jest/test-result'
 import { IPC } from 'node-ipc'
 import type { RunnerOptions } from './types'
 import path from 'path'
@@ -67,9 +65,10 @@ export default class VSCodeTestRunner {
     }
 
     // Start IPC server.
+    const { DEBUG_VSCODE_IPC } = process.env
     const ipc = new IPC()
 
-    ipc.config.silent = true
+    ipc.config.silent = !DEBUG_VSCODE_IPC
     ipc.config.id = `jest-runner-vscode-server-${process.pid}`
 
     await new Promise<void>(resolve => {
@@ -114,65 +113,23 @@ export default class VSCodeTestRunner {
           ...(vscodeOptions.launchArgs ?? []),
         ]
 
-        for (const test of testGroup) {
-          await onStart(test)
-        }
-
-        const testResults = await runVSCode(
+        await runVSCode({
           vscodePath,
           args,
-          vscodeOptions.extensionTestsEnv ?? {},
-          {
+          filterOutput: vscodeOptions.filterOutput,
+          env: vscodeOptions.extensionTestsEnv,
+          ipc,
+          options: {
             globalConfig: this._globalConfig,
             workspacePath: this._globalConfig.rootDir,
             options,
             testPaths: testGroup.map(test => test.path),
           },
-          ipc
-        )
-
-        if (!testResults) {
-          throw new Error('No response from VS Code')
-        }
-
-        if (testResults.is === 'error') {
-          throw testResults.error
-        }
-
-        const testResultsByPath = new Map<string, TestResult>()
-
-        for (const result of testResults.results.testResults) {
-          testResultsByPath.set((result as any).testFilePath, result)
-        }
-
-        for (const test of testGroup) {
-          const result = testResultsByPath.get(test.path)
-
-          if (!result) {
-            await onFailure(
-              test,
-              new Error(
-                `No test result returned for ${test.path}`
-              ) as JestTestResult.SerializableError
-            )
-            continue
-          }
-
-          if (result.testExecError) {
-            const error: JestTestResult.SerializableError = Object.assign(
-              new Error(
-                result.testExecError.message ??
-                  (result.testExecError as any).diagnosticText ??
-                  result.failureMessage?.replace(/^[^\n]+\n\n?/, '')
-              ),
-              { code: undefined, stack: undefined, type: undefined },
-              result.testExecError
-            )
-            await onFailure(test, error)
-          } else {
-            await onResult(test, result)
-          }
-        }
+          tests,
+          onResult,
+          onFailure,
+          onStart,
+        })
       } catch (error: any) {
         for (const test of testGroup) {
           await onFailure(test, error)
