@@ -1,10 +1,10 @@
-import type { RemoteTestOptions, RemoteTestResults } from './types'
+import type { RemoteTestOptions } from './types'
 import * as jest from '@jest/core'
 import type { buildArgv as buildArgvType } from 'jest-cli/build/cli/index'
 import vscode from 'vscode'
 import path from 'path'
 import process from 'process'
-import { IPC } from 'node-ipc'
+import IPCClient from './ipc-client'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const buildArgv: typeof buildArgvType = require(path.resolve(
@@ -17,29 +17,15 @@ const vscodeModulePath = require.resolve('./jest-vscode-module')
 const moduleNameMapper = JSON.stringify({ '^vscode$': vscodeModulePath })
 
 export async function run(): Promise<void> {
-  const { IPC_CHANNEL, PARENT_JEST_OPTIONS } = process.env
-
-  if (!IPC_CHANNEL) {
-    throw new Error('IPC_CHANNEL is not defined')
-  }
-
-  const ipc = new IPC()
-
-  ipc.config.silent = true
-  ipc.config.id = `jest-runner-vscode-client-${process.pid}`
-
-  await new Promise<void>(resolve =>
-    ipc.connectTo(IPC_CHANNEL, () => {
-      ipc.of[IPC_CHANNEL].on('connect', resolve)
-    })
-  )
+  const ipc = new IPCClient('child')
 
   const disconnected = new Promise<void>(resolve =>
-    ipc.of[IPC_CHANNEL].on('disconnect', resolve)
+    ipc.on('disconnect', resolve)
   )
 
-  let response: RemoteTestResults
   try {
+    const { PARENT_JEST_OPTIONS } = process.env
+
     if (!PARENT_JEST_OPTIONS) {
       throw new Error('PARENT_JEST_OPTIONS is not defined')
     }
@@ -51,30 +37,20 @@ export async function run(): Promise<void> {
       '--runner=jest-runner',
       `--env=${vscodeTestEnvPath}`,
       `--moduleNameMapper=${moduleNameMapper}`,
+      `--reporters=${require.resolve('./child-reporter')}`,
       ...(options.globalConfig.updateSnapshot === 'all' ? ['-u'] : []),
       '--runTestsByPath',
       ...options.testPaths,
     ])
 
-    const { results } =
-      (await jest.runCLI(jestOptions, [options.globalConfig.rootDir])) ?? {}
-
-    response = {
-      is: 'ok',
-      results,
-    }
+    await jest.runCLI(jestOptions, [options.globalConfig.rootDir])
   } catch (error: any) {
     const errorObj = JSON.parse(
       JSON.stringify(error, Object.getOwnPropertyNames(error))
     )
-    response = {
-      is: 'error',
-      error: errorObj,
-    }
+    ipc.emit('error', errorObj)
   }
 
-  ipc.of[IPC_CHANNEL].emit('test-results', response)
-  ipc.disconnect(IPC_CHANNEL)
-  await disconnected
+  await Promise.race([disconnected, ipc.disconnect()])
   await vscode.commands.executeCommand('workbench.action.closeWindow')
 }

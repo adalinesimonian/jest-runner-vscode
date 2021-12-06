@@ -55,6 +55,18 @@ module.exports = {
     'FOO_BAR': 'baz',
   },
 
+  // optional, whether or not to filter console output
+  // if unspecified, defaults to false
+  // if true, filters all output to stdout and stderr, except for the download
+  // of the VS Code executable, to only show the output of console.log(),
+  // console.error(), console.warn(), and console.info() calls made by tests.
+  //
+  // NOTE: This will not display output if you require() or import the console
+  // API in your tests, as only the global console object is overridden. It also
+  // will not work if you are using lower-level APIs such as
+  // process.stdout.write().
+  filterOutput: true,
+
   // optional, additional arguments to pass to VS Code
   launchArgs: [
     '--new-window',
