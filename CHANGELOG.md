@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Environments using Yarn PnP are now supported. ([#46](https://github.com/adalinesimonian/jest-runner-vscode/pull/46))
+- All options from the parent Jest runner are now passed to the child runner. ([`f300e64`](https://github.com/adalinesimonian/jest-runner-vscode/commit/f300e64))
+- VS Code process information and download progress can now be suppressed using the `quiet` option. ([`f300e64`](https://github.com/adalinesimonian/jest-runner-vscode/commit/f300e64))
+
 ## [v2.1.0](https://github.com/adalinesimonian/jest-runner-vscode/compare/v2.0.0...v2.1.0) (2021-12-05)
 
 ### Added
@@ -15,7 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Changed
 
-- Communication between VS Code and Jest is now handled using an IPC channel instead of using the standard output of the VS Code process. ([0c98677](https://github.com/adalinesimonian/jest-runner-vscode/commit/0c98677))
+- Communication between VS Code and Jest is now handled using an IPC channel instead of using the standard output of the VS Code process. ([`0c98677`](https://github.com/adalinesimonian/jest-runner-vscode/commit/0c98677))
 
 ## [v2.0.0](https://github.com/adalinesimonian/jest-runner-vscode/tree/v2.0.0) (2021-09-22)
 
