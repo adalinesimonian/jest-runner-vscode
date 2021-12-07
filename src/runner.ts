@@ -106,7 +106,9 @@ export default class VSCodeTestRunner {
           `--extensionDevelopmentPath=${
             vscodeOptions.extensionDevelopmentPath ?? this._globalConfig.rootDir
           }`,
-          `--extensionTestsPath=${require.resolve('./child-process-runner')}`,
+          `--extensionTestsPath=${require.resolve(
+            './child-process-entry-point'
+          )}`,
           ...(vscodeOptions.openInFolder
             ? [vscodeOptions.workspaceDir ?? testDir]
             : []),

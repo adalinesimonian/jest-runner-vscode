@@ -37,8 +37,15 @@ export default async function runVSCode({
 
     const environment = {
       ...process.env,
+      NODE_OPTIONS: process.env.NODE_OPTIONS
+        ? process.env.NODE_OPTIONS.replace(
+            /(?:--require .+?\.pnp\.c?js|--experimental-loader .+?\.pnp\.loader\.mjs)/g,
+            ''
+          )
+        : '',
       ...env,
       PARENT_JEST_OPTIONS: JSON.stringify(options),
+      PARENT_CWD: process.cwd(),
       IPC_CHANNEL: ipc.config.id,
     }
 
@@ -112,6 +119,10 @@ export default async function runVSCode({
     ipc.server.on('stdout', onStdout)
     ipc.server.on('stderr', onStderr)
     ipc.server.on('error', onError)
+
+    console.log('Starting VS Code')
+    console.log(`  ${vscodePath} ${args.join(' ')}`)
+    console.log(environment)
 
     const vscode = cp.spawn(vscodePath, args, { env: environment })
 
