@@ -28,8 +28,7 @@ export default class VSCodeTestRunner {
     watcher: JestRunner.TestWatcher,
     onStart: JestRunner.OnTestStart,
     onResult: JestRunner.OnTestSuccess,
-    onFailure: JestRunner.OnTestFailure,
-    options: JestRunner.TestRunnerOptions
+    onFailure: JestRunner.OnTestFailure
   ): Promise<void> {
     const baseVSCodeOptions: RunnerOptions =
       (await cosmiconfig('jest-runner-vscode').search())?.config ?? {}
@@ -95,7 +94,7 @@ export default class VSCodeTestRunner {
           (await downloadVSCode(
             vscodeOptions.version,
             vscodeOptions.platform,
-            this._globalConfig.silent,
+            vscodeOptions.quiet || this._globalConfig.silent,
             this._globalConfig.json || this._globalConfig.useStderr
           ))
 
@@ -116,19 +115,16 @@ export default class VSCodeTestRunner {
         await runVSCode({
           vscodePath,
           args,
-          filterOutput: vscodeOptions.filterOutput,
+          jestArgs: process.argv.slice(2),
           env: vscodeOptions.extensionTestsEnv,
-          ipc,
-          options: {
-            globalConfig: this._globalConfig,
-            workspacePath: this._globalConfig.rootDir,
-            options,
-            testPaths: testGroup.map(test => test.path),
-          },
-          tests,
+          tests: testGroup,
+          globalConfig: this._globalConfig,
+          filterOutput: vscodeOptions.filterOutput,
+          onStart,
           onResult,
           onFailure,
-          onStart,
+          ipc,
+          quiet: vscodeOptions.quiet,
         })
       } catch (error: any) {
         for (const test of testGroup) {

@@ -5,35 +5,47 @@ import type * as JestRunner from 'jest-runner'
 import cp from 'child_process'
 import console from 'console'
 import type { IPC } from 'node-ipc'
+import { Config } from '@jest/types'
 
-export default async function runVSCode({
-  vscodePath,
-  args,
-  env,
-  options,
-  ipc,
-  tests,
-  filterOutput,
-  onStart,
-  onResult,
-  onFailure,
-}: {
+export type RunVSCodeOptions = {
   vscodePath: string
   args: string[]
+  jestArgs: string[]
   env?: Record<string, string>
-  options: RemoteTestOptions
-  ipc: InstanceType<typeof IPC>
   tests: Test[]
+  globalConfig: Config.GlobalConfig
   filterOutput?: boolean
   onStart: JestRunner.OnTestStart
   onResult: JestRunner.OnTestSuccess
   onFailure: JestRunner.OnTestFailure
-}): Promise<void> {
+  ipc: InstanceType<typeof IPC>
+  quiet?: boolean
+}
+
+export default async function runVSCode({
+  vscodePath,
+  args,
+  jestArgs,
+  env,
+  tests,
+  globalConfig,
+  filterOutput,
+  onStart,
+  onResult,
+  onFailure,
+  ipc,
+  quiet,
+}: RunVSCodeOptions): Promise<void> {
   return await new Promise<void>(resolve => {
-    const useStdErr =
-      options.globalConfig.json || options.globalConfig.useStderr
+    const useStdErr = globalConfig.json || globalConfig.useStderr
     const log = useStdErr ? console.error : console.log
-    const silent = options.globalConfig.silent
+    const { silent } = globalConfig
+
+    const remoteOptions: RemoteTestOptions = {
+      args: jestArgs,
+      testPaths: tests.map(test => test.path),
+      workspacePath: globalConfig.rootDir,
+    }
 
     const environment = {
       ...process.env,
@@ -44,7 +56,7 @@ export default async function runVSCode({
           )
         : '',
       ...env,
-      PARENT_JEST_OPTIONS: JSON.stringify(options),
+      PARENT_JEST_OPTIONS: JSON.stringify(remoteOptions),
       PARENT_CWD: process.cwd(),
       IPC_CHANNEL: ipc.config.id,
     }
@@ -110,7 +122,7 @@ export default async function runVSCode({
 
     const onError = (error: Error) => {
       childError = error
-      silent || log(error.stack)
+      silent || quiet || log(error.stack)
     }
 
     ipc.server.on('testFileResult', onTestFileResult)
@@ -119,10 +131,6 @@ export default async function runVSCode({
     ipc.server.on('stdout', onStdout)
     ipc.server.on('stderr', onStderr)
     ipc.server.on('error', onError)
-
-    console.log('Starting VS Code')
-    console.log(`  ${vscodePath} ${args.join(' ')}`)
-    console.log(environment)
 
     const vscode = cp.spawn(vscodePath, args, { env: environment })
 
@@ -152,7 +160,7 @@ export default async function runVSCode({
       const message = `VS Code exited with exit code ${exit}`
 
       if (typeof code !== 'number' || code !== 0) {
-        silent || console.error(message)
+        silent || quiet || console.error(message)
         const error = vscodeError ?? childError ?? new Error(message)
 
         for (const test of tests) {
@@ -163,7 +171,7 @@ export default async function runVSCode({
           }
         }
       } else {
-        silent || log(message)
+        silent || quiet || log(message)
 
         for (const test of tests) {
           const completed = completedTests.has(test)

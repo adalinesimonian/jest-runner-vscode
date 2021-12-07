@@ -24,18 +24,18 @@ export async function run(): Promise<void> {
     const options: RemoteTestOptions = JSON.parse(PARENT_JEST_OPTIONS)
 
     const jestOptions = [
+      ...options.args,
       '-i',
       '--colors',
       '--runner=jest-runner',
       `--env=${vscodeTestEnvPath}`,
       `--moduleNameMapper=${moduleNameMapper}`,
       `--reporters=${require.resolve('./reporter')}`,
-      ...(options.globalConfig.updateSnapshot === 'all' ? ['-u'] : []),
       '--runTestsByPath',
       ...options.testPaths,
     ]
 
-    await jest.run(jestOptions, options.globalConfig.rootDir)
+    await jest.run(jestOptions, options.workspacePath)
   } catch (error: any) {
     const errorObj = JSON.parse(
       JSON.stringify(error, Object.getOwnPropertyNames(error))

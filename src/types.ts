@@ -1,6 +1,4 @@
 import type { AggregatedResult } from '@jest/test-result'
-import type { Config } from '@jest/types'
-import type * as JestRunner from 'jest-runner'
 import type {
   DownloadPlatform,
   DownloadVersion,
@@ -16,13 +14,13 @@ export interface RunnerOptions {
   workspaceDir?: string
   openInFolder?: boolean
   filterOutput?: boolean
+  quiet?: boolean
 }
 
 export interface RemoteTestOptions {
   testPaths: string[]
-  globalConfig: Config.GlobalConfig
+  args: string[]
   workspacePath: string
-  options: JestRunner.TestRunnerOptions
 }
 
 export type RemoteTestResults =
