@@ -1,16 +1,8 @@
 import type { RemoteTestOptions } from '../types'
-import * as jest from '@jest/core'
-import type { buildArgv as buildArgvType } from 'jest-cli/build/cli/index'
+import * as jest from 'jest-cli'
 import vscode from 'vscode'
-import path from 'path'
 import process from 'process'
 import IPCClient from './ipc-client'
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const buildArgv: typeof buildArgvType = require(path.resolve(
-  path.dirname(require.resolve('jest-cli')),
-  'cli/index.js'
-)).buildArgv
 
 const vscodeTestEnvPath = require.resolve('./environment')
 const vscodeModulePath = require.resolve('./vscode-module')
@@ -31,7 +23,7 @@ export async function run(): Promise<void> {
     }
     const options: RemoteTestOptions = JSON.parse(PARENT_JEST_OPTIONS)
 
-    const jestOptions = buildArgv([
+    const jestOptions = [
       '-i',
       '--colors',
       '--runner=jest-runner',
@@ -41,9 +33,9 @@ export async function run(): Promise<void> {
       ...(options.globalConfig.updateSnapshot === 'all' ? ['-u'] : []),
       '--runTestsByPath',
       ...options.testPaths,
-    ])
+    ]
 
-    await jest.runCLI(jestOptions, [options.globalConfig.rootDir])
+    await jest.run(jestOptions, options.globalConfig.rootDir)
   } catch (error: any) {
     const errorObj = JSON.parse(
       JSON.stringify(error, Object.getOwnPropertyNames(error))

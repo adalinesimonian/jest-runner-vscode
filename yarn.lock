@@ -4125,7 +4125,6 @@ fsevents@^2.3.2:
   version: 0.0.0-use.local
   resolution: "jest-runner-vscode@workspace:."
   dependencies:
-    "@jest/core": ^27.2.1
     "@jest/reporters": ^27.4.2
     "@jest/test-result": ^27.4.2
     "@jest/types": ^27.4.2

@@ -34,7 +34,6 @@
     "node": ">=14.16.0"
   },
   "dependencies": {
-    "@jest/core": "^27.2.1",
     "@jest/reporters": "^27.4.2",
     "@jest/test-result": "^27.4.2",
     "@jest/types": "^27.4.2",
