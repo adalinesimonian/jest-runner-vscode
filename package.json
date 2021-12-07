@@ -25,8 +25,8 @@
     "lint:prettier": "prettier --check .",
     "lint:types": "tsc --noEmit",
     "prepack": "yarn build",
-    "test": "node clean-e2e.mjs && jest -i",
-    "ci:download-vscode": "node ci-download-vscode.mjs"
+    "test": "node --no-warnings clean-e2e.mjs && jest -i",
+    "ci:download-vscode": "node --no-warnings ci-download-vscode.mjs"
   },
   "packageManager": "yarn@3.1.1",
   "engines": {

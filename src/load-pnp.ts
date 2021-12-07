@@ -41,7 +41,7 @@ async function findPnPLoader(dir: string): Promise<string | undefined> {
   return undefined
 }
 
-export default async function loadPnP() {
+export default async function loadPnP(): Promise<void> {
   const { PARENT_CWD } = process.env
 
   if (PARENT_CWD) {

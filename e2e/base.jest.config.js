@@ -1,6 +1,6 @@
 /** @type {import('@jest/types').Config.InitialOptions} */
 const config = {
-  runner: 'vscode',
+  runner: '../..',
   reporters: ['../jest-silent-reporter.js'],
   modulePathIgnorePatterns: ['.vscode-test/'],
 }
