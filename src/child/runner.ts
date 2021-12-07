@@ -1,4 +1,4 @@
-import type { RemoteTestOptions } from './types'
+import type { RemoteTestOptions } from '../types'
 import * as jest from '@jest/core'
 import type { buildArgv as buildArgvType } from 'jest-cli/build/cli/index'
 import vscode from 'vscode'
@@ -12,8 +12,8 @@ const buildArgv: typeof buildArgvType = require(path.resolve(
   'cli/index.js'
 )).buildArgv
 
-const vscodeTestEnvPath = require.resolve('./jest-vscode-env')
-const vscodeModulePath = require.resolve('./jest-vscode-module')
+const vscodeTestEnvPath = require.resolve('./environment')
+const vscodeModulePath = require.resolve('./vscode-module')
 const moduleNameMapper = JSON.stringify({ '^vscode$': vscodeModulePath })
 
 export async function run(): Promise<void> {
@@ -37,7 +37,7 @@ export async function run(): Promise<void> {
       '--runner=jest-runner',
       `--env=${vscodeTestEnvPath}`,
       `--moduleNameMapper=${moduleNameMapper}`,
-      `--reporters=${require.resolve('./child-reporter')}`,
+      `--reporters=${require.resolve('./reporter')}`,
       ...(options.globalConfig.updateSnapshot === 'all' ? ['-u'] : []),
       '--runTestsByPath',
       ...options.testPaths,
