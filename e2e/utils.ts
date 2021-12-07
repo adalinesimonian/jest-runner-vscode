@@ -89,8 +89,19 @@ export async function runJest(
     reject: false,
   })
   const jestOutput = results.stdout.match(/\n?[^\n]+\n*$/)?.[0]
-  return {
-    ...results,
-    json: jestOutput ? normalizeResults(JSON.parse(jestOutput)) : {},
+
+  if (jestOutput) {
+    try {
+      const json = JSON.parse(jestOutput)
+      return {
+        ...results,
+        json: normalizeResults(json),
+      }
+    } catch (error) {
+      console.error(`Failed to parse jest output: ${jestOutput}`)
+      throw error
+    }
   }
+
+  return { ...results, json: {} }
 }
