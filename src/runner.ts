@@ -7,6 +7,7 @@ import process from 'process'
 import { cosmiconfig } from 'cosmiconfig'
 import downloadVSCode from './download-vscode'
 import runVSCode from './run-vscode'
+import type { SerializableError } from '@jest/test-result'
 
 export * from './public-types'
 
@@ -31,7 +32,8 @@ export default class VSCodeTestRunner {
     onFailure: JestRunner.OnTestFailure
   ): Promise<void> {
     const baseVSCodeOptions: RunnerOptions =
-      (await cosmiconfig('jest-runner-vscode').search())?.config ?? {}
+      ((await cosmiconfig('jest-runner-vscode').search())
+        ?.config as RunnerOptions) ?? {}
 
     // Runs a separate process for each test directory.
     //
@@ -85,8 +87,8 @@ export default class VSCodeTestRunner {
       try {
         const vscodeOptions: RunnerOptions = {
           ...baseVSCodeOptions,
-          ...((await cosmiconfig('jest-runner-vscode').search(testDir))
-            ?.config ?? {}),
+          ...(((await cosmiconfig('jest-runner-vscode').search(testDir))
+            ?.config as RunnerOptions) ?? {}),
         }
 
         const vscodePath =
@@ -126,9 +128,9 @@ export default class VSCodeTestRunner {
           ipc,
           quiet: vscodeOptions.quiet,
         })
-      } catch (error: any) {
+      } catch (error: unknown) {
         for (const test of testGroup) {
-          await onFailure(test, error)
+          await onFailure(test, error as SerializableError)
         }
       }
     }

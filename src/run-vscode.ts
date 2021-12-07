@@ -38,7 +38,9 @@ export default async function runVSCode({
 }: RunVSCodeOptions): Promise<void> {
   return await new Promise<void>(resolve => {
     const useStdErr = globalConfig.json || globalConfig.useStderr
-    const log = useStdErr ? console.error : console.log
+    const log = useStdErr
+      ? console.error.bind(console)
+      : console.log.bind(console)
     const { silent } = globalConfig
 
     const remoteOptions: RemoteTestOptions = {
@@ -69,7 +71,7 @@ export default async function runVSCode({
 
     const completedTests = new Set<Test>()
 
-    const onTestFileResult = ({
+    const onTestFileResult = async ({
       test,
       testResult,
     }: {
@@ -85,25 +87,29 @@ export default async function runVSCode({
         const error: SerializableError = Object.assign(
           new Error(
             testResult.testExecError.message ??
-              (testResult.testExecError as any).diagnosticText ??
+              (
+                testResult.testExecError as SerializableError & {
+                  diagnosticText: string
+                }
+              ).diagnosticText ??
               testResult.failureMessage?.replace(/^[^\n]+\n\n?/, '')
           ),
           { code: undefined, stack: undefined, type: undefined },
           testResult.testExecError
         )
 
-        onFailure(matchingTest, error)
+        await onFailure(matchingTest, error)
       } else {
-        onResult(matchingTest, testResult)
+        await onResult(matchingTest, testResult)
       }
     }
 
-    const onTestStart = ({ test }: { test: Test }) => {
+    const onTestStart = async ({ test }: { test: Test }) => {
       const matchingTest = testsByPath.get(test.path)
       if (!matchingTest) {
         return
       }
-      onStart(matchingTest)
+      await onStart(matchingTest)
     }
 
     const onStdout = (str: string) => {
@@ -125,9 +131,21 @@ export default async function runVSCode({
       silent || quiet || log(error.stack)
     }
 
-    ipc.server.on('testFileResult', onTestFileResult)
-    ipc.server.on('testStart', onTestStart)
-    ipc.server.on('testFileStart', onTestStart)
+    ipc.server.on(
+      'testFileResult',
+      (param: Parameters<typeof onTestFileResult>[0]) => {
+        onTestFileResult(param).catch(onError)
+      }
+    )
+    ipc.server.on('testStart', (param: Parameters<typeof onTestStart>[0]) => {
+      onTestStart(param).catch(onError)
+    })
+    ipc.server.on(
+      'testFileStart',
+      (param: Parameters<typeof onTestStart>[0]) => {
+        onTestStart(param).catch(onError)
+      }
+    )
     ipc.server.on('stdout', onStdout)
     ipc.server.on('stderr', onStderr)
     ipc.server.on('error', onError)
@@ -156,7 +174,7 @@ export default async function runVSCode({
       }
       exited = true
 
-      const exit = code ?? signal
+      const exit = code ?? signal ?? '<unknown>'
       const message = `VS Code exited with exit code ${exit}`
 
       if (typeof code !== 'number' || code !== 0) {
@@ -198,7 +216,17 @@ export default async function runVSCode({
       resolve()
     }
 
-    vscode.on('exit', onExit)
-    vscode.on('close', onExit)
+    const onExitWrapper = (
+      code: number | null,
+      signal: NodeJS.Signals | null
+    ) => {
+      onExit(code, signal).catch((error: Error) => {
+        onError(error)
+        resolve()
+      })
+    }
+
+    vscode.on('exit', onExitWrapper)
+    vscode.on('close', onExitWrapper)
   })
 }

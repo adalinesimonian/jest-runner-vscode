@@ -21,7 +21,7 @@ export async function run(): Promise<void> {
     if (!PARENT_JEST_OPTIONS) {
       throw new Error('PARENT_JEST_OPTIONS is not defined')
     }
-    const options: RemoteTestOptions = JSON.parse(PARENT_JEST_OPTIONS)
+    const options = JSON.parse(PARENT_JEST_OPTIONS) as RemoteTestOptions
 
     const jestOptions = [
       ...options.args,
@@ -36,10 +36,10 @@ export async function run(): Promise<void> {
     ]
 
     await jest.run(jestOptions, options.workspacePath)
-  } catch (error: any) {
+  } catch (error: unknown) {
     const errorObj = JSON.parse(
       JSON.stringify(error, Object.getOwnPropertyNames(error))
-    )
+    ) as Error
     ipc.emit('error', errorObj)
   }
 

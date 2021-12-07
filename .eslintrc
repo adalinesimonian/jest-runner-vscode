@@ -4,11 +4,15 @@
     "node": true,
     "jest": false
   },
+  "parserOptions": {
+    "project": "./tsconfig.test.json"
+  },
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "prettier"
   ],
   "rules": {
@@ -54,5 +58,19 @@
     "spaced-comment": ["error", "always"],
     "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/no-explicit-any": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["e2e/**/*"],
+      "env": {
+        "jest": true
+      }
+    },
+    {
+      "files": ["e2e/**/*.js"],
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ]
 }

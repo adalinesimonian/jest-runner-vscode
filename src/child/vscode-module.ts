@@ -1,1 +1,1 @@
-module.exports = (global as any).vscode
+module.exports = (global as { vscode?: unknown }).vscode

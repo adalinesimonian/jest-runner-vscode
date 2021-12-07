@@ -12,7 +12,7 @@ class VSCodeEnvironment extends NodeEnvironment {
     await loadPnP()
     this.global.vscode = vscode
     await ipc.connect()
-    await wrapIO(ipc, this.global)
+    wrapIO(ipc, this.global)
   }
 
   async teardown() {

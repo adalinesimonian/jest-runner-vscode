@@ -53,7 +53,7 @@ export default async function loadPnP(): Promise<void> {
       if (loader) {
         try {
           // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
-          require(loader).setup()
+          ;(require(loader) as { setup: () => void }).setup()
 
           const pnpifiedModule = module.Module as typeof module.Module & {
             _load: (request: string) => unknown

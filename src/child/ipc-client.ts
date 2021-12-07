@@ -70,20 +70,24 @@ export default class IPCClient {
   }
 
   async connect(): Promise<void> {
-    return new Promise<void>(resolve => {
-      this.#ipc.connectTo(this.#ipcChannel, async () => {
+    return new Promise<void>((resolve, reject) => {
+      this.#ipc.connectTo(this.#ipcChannel, () => {
         this.#connected = true
 
-        await this.#flush()
+        this.#flush()
+          .then(() => {
+            this.#emitter.emit('connect')
 
-        this.#emitter.emit('connect')
+            this.#ipc.of[this.#ipcChannel].on('disconnect', () => {
+              this.#connected = false
+              this.#emitter.emit('disconnect')
+            })
 
-        this.#ipc.of[this.#ipcChannel].on('disconnect', () => {
-          this.#connected = false
-          this.#emitter.emit('disconnect')
-        })
-
-        resolve()
+            resolve()
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     })
   }
@@ -111,7 +115,7 @@ export default class IPCClient {
       const promise = this.#writer.write(type, data)
 
       this.#promises.add(promise)
-      promise.then(() => this.#promises.delete(promise))
+      promise.then(() => this.#promises.delete(promise)).catch(() => undefined)
     }
   }
 }

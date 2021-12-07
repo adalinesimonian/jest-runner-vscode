@@ -1,7 +1,11 @@
 import path from 'path'
 import execa from 'execa'
 import fs from 'fs-extra'
-import type { AggregatedResult, AssertionResult } from '@jest/test-result'
+import type {
+  AggregatedResult,
+  AssertionResult,
+  TestResult,
+} from '@jest/test-result'
 
 const rootDir = path.resolve(__dirname, '..')
 const vscodeTestDir = path.resolve(rootDir, '.vscode-test')
@@ -20,14 +24,17 @@ function sortByProperty<T>(property: keyof T): (a: T, b: T) => number {
 
 function normalizeMessages<T>(obj: T): T {
   if (obj && typeof obj === 'object') {
-    const objAsAny = obj as any
-    Object.getOwnPropertyNames(obj).forEach(key => {
+    const objAsAny = obj
+    const keys = Object.getOwnPropertyNames(obj) as (keyof T)[]
+    keys.forEach(key => {
+      const value = objAsAny[key] as unknown
+
       if (key === 'failureMessage' || key === 'message') {
-        objAsAny[key] = ''
-      } else if (key === 'failureMessages' && Array.isArray(objAsAny[key])) {
-        objAsAny[key] = objAsAny[key].map(() => '')
+        objAsAny[key] = '' as unknown as T[keyof T]
+      } else if (key === 'failureMessages' && Array.isArray(value)) {
+        objAsAny[key] = value.map(() => '') as unknown as T[keyof T]
       } else {
-        objAsAny[key] = normalizeMessages(objAsAny[key])
+        objAsAny[key] = normalizeMessages(value) as T[keyof T]
       }
     })
   }
@@ -43,21 +50,30 @@ function normalizePath(pathString: string): string {
     : pathString.replace(rootDir, '')
 }
 
-function normalizeResults(results: AggregatedResult): AggregatedResult {
+type ActualTestResult = TestResult & {
+  name: string
+  assertionResults: AssertionResult[]
+}
+
+type ActualAggregatedResult = Omit<AggregatedResult, 'testResults'> & {
+  testResults: ActualTestResult[]
+}
+
+function normalizeResults(
+  results: ActualAggregatedResult
+): ActualAggregatedResult {
   const clean = Object.assign({}, results, {
-    testResults: results.testResults
-      .sort(sortByProperty('name' as any))
-      .map(result =>
-        Object.assign({}, result, {
-          assertionResults: (
-            (result as any).assertionResults as AssertionResult[]
-          ).sort(sortByProperty('fullName')),
-          failureMessage: result.failureMessage,
-          name: normalizePath((result as any).name),
-          startTime: undefined,
-          endTime: undefined,
-        })
-      ),
+    testResults: results.testResults.sort(sortByProperty('name')).map(result =>
+      Object.assign({}, result, {
+        assertionResults: result.assertionResults.sort(
+          sortByProperty('fullName')
+        ),
+        failureMessage: result.failureMessage,
+        name: normalizePath(result.name),
+        startTime: undefined,
+        endTime: undefined,
+      })
+    ),
     startTime: undefined,
   })
   return normalizeMessages(clean)
@@ -81,7 +97,7 @@ export async function prepareDir(cwd: string): Promise<void> {
 export async function runJest(
   cwd: string,
   args: string[] = []
-): Promise<execa.ExecaChildProcess & Promise<{ json: any }>> {
+): Promise<execa.ExecaChildProcess & Promise<{ json: unknown }>> {
   const results = await execa('jest', ['--json', ...args], {
     cwd,
     preferLocal: true,
@@ -92,7 +108,7 @@ export async function runJest(
 
   if (jestOutput) {
     try {
-      const json = JSON.parse(jestOutput)
+      const json = JSON.parse(jestOutput) as ActualAggregatedResult
       return {
         ...results,
         json: normalizeResults(json),
