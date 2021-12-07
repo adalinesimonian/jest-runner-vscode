@@ -39,6 +39,7 @@ export default async function runVSCode({
       ...process.env,
       ...env,
       PARENT_JEST_OPTIONS: JSON.stringify(options),
+      PARENT_CWD: process.cwd(),
       IPC_CHANNEL: ipc.config.id,
     }
 

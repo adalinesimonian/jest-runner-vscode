@@ -71,14 +71,11 @@ export async function prepareDir(cwd: string): Promise<void> {
     'dir'
   )
   await fs.ensureFile(path.resolve(cwd, 'yarn.lock'))
-  await execa('yarn', ['--cwd', cwd], {
-    cwd,
-    timeout: 30000,
-    env: {
-      YARN_ENABLE_INLINE_BUILDS: '1',
-      YARN_ENABLE_IMMUTABLE_INSTALLS: '0',
-    },
-  })
+  await fs.symlink(
+    path.resolve(__dirname, '../.pnp.cjs'),
+    path.resolve(cwd, '.pnp.cjs'),
+    'file'
+  )
 }
 
 export async function runJest(
