@@ -26,6 +26,8 @@ $ npm i -D jest-runner-vscode
 
 ## Configuration
 
+> See the [public types](src/public-types.ts) for details on all available configuration options.
+
 ```js
 // jest.config.js (or similar)
 
@@ -37,53 +39,14 @@ module.exports = {
 ```js
 // jest-runner-vscode.config.js
 
+/** @type {import('jest-runner-vscode').RunnerOptions} */
 module.exports = {
-  // optional, path to VS Code executable
-  // if unspecified, downloads a copy of Code to use
-  vscodeExecutablePath: '/path/to/code'
-
-  // optional, version of Code to download
-  // ('insiders', 'stable', or version tags '1.56.2', etc.)
   version: '1.56.2',
-
-  // optional, platform to download Code for
-  // ('darwin', 'win32-archive', 'win32-x64-archive', or 'linux-x64')
-  platform: 'linux-x64',
-
-  // optional, environment variables to pass to tests
   extensionTestsEnv: {
-    'FOO_BAR': 'baz',
+    FOO_BAR: 'baz',
   },
-
-  // optional, whether or not to filter console output
-  // if unspecified, defaults to false
-  // if true, filters all output to stdout and stderr, except for the download
-  // of the VS Code executable, to only show the output of console.log(),
-  // console.error(), console.warn(), and console.info() calls made by tests.
-  //
-  // NOTE: This will not display output if you require() or import the console
-  // API in your tests, as only the global console object is overridden. It also
-  // will not work if you are using lower-level APIs such as
-  // process.stdout.write().
-  filterOutput: true,
-
-  // optional, additional arguments to pass to VS Code
-  launchArgs: [
-    '--new-window',
-    '--disable-extensions',
-  ],
-
-  // optional, absolute path to the extension root
-  // (where the extension's package.json lives)
-  // defaults to the jest config's rootDir
-  extensionDevelopmentPath: '/path/to/extension',
-
-  // optional, directory in which to open VS Code
-  // (used if openInFolder is true)
-  // defaults to the folder containing the test file
+  launchArgs: ['--new-window', '--disable-extensions'],
   workspaceDir: 'path/to/workspace',
-
-  // optional, whether or not to open Code in a folder
   openInFolder: true,
 }
 ```

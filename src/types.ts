@@ -1,21 +1,6 @@
 import type { AggregatedResult } from '@jest/test-result'
-import type {
-  DownloadPlatform,
-  DownloadVersion,
-} from '@vscode/test-electron/out/download'
 
-export interface RunnerOptions {
-  vscodeExecutablePath?: string
-  version?: DownloadVersion
-  platform?: DownloadPlatform
-  extensionTestsEnv?: Record<string, string>
-  launchArgs?: string[]
-  extensionDevelopmentPath?: string
-  workspaceDir?: string
-  openInFolder?: boolean
-  filterOutput?: boolean
-  quiet?: boolean
-}
+export * from './public-types'
 
 export interface RemoteTestOptions {
   testPaths: string[]

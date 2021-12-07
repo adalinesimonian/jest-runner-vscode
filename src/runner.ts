@@ -8,7 +8,7 @@ import { cosmiconfig } from 'cosmiconfig'
 import downloadVSCode from './download-vscode'
 import runVSCode from './run-vscode'
 
-export type { RunnerOptions }
+export * from './public-types'
 
 export default class VSCodeTestRunner {
   readonly _globalConfig: Config.GlobalConfig
