@@ -6,11 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [v2.2.0](https://github.com/adalinesimonian/jest-runner-vscode/compare/v2.1.0...v2.2.0) (2021-12-07)
+
 ### Added
 
 - Environments using Yarn PnP are now supported. ([#46](https://github.com/adalinesimonian/jest-runner-vscode/pull/46))
 - All options from the parent Jest runner are now passed to the child runner. ([`f300e64`](https://github.com/adalinesimonian/jest-runner-vscode/commit/f300e64))
 - VS Code process information and download progress can now be suppressed using the `quiet` option. ([`f300e64`](https://github.com/adalinesimonian/jest-runner-vscode/commit/f300e64))
+
+### Changed
+
+- A less internal API is now used to start the child instance of Jest. ([`6196f24`](https://github.com/adalinesimonian/jest-runner-vscode/commit/6196f24))
+
+### Fixed
+
+- Tests in nested directories no longer result in the runner expecting and failing tests from a different directory that are not yet queued. ([`f300e64`](https://github.com/adalinesimonian/jest-runner-vscode/commit/f300e64))
 
 ## [v2.1.0](https://github.com/adalinesimonian/jest-runner-vscode/compare/v2.0.0...v2.1.0) (2021-12-05)
 
