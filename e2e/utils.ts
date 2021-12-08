@@ -94,26 +94,40 @@ export async function prepareDir(cwd: string): Promise<void> {
   )
 }
 
+async function gracefulReadFile(file: string): Promise<string> {
+  try {
+    return await fs.readFile(file, 'utf8')
+  } catch (e) {
+    return ''
+  }
+}
+
 export async function runJest(
   cwd: string,
   args: string[] = []
 ): Promise<execa.ExecaChildProcess & Promise<{ json: unknown }>> {
-  const results = await execa('jest', ['--json', ...args], {
-    cwd,
-    preferLocal: true,
-    timeout: 30000,
-    reject: false,
-  })
+  const results = await execa(
+    'jest',
+    ['--json', '--outputFile', 'jest-output.json', ...args],
+    {
+      cwd,
+      preferLocal: true,
+      timeout: 30000,
+      reject: false,
+    }
+  )
+  const outputFile = path.resolve(cwd, 'jest-output.json')
+  const output = await gracefulReadFile(outputFile)
 
-  if (results.stdout) {
+  if (output.trim()) {
     try {
-      const json = JSON.parse(results.stdout) as ActualAggregatedResult
+      const json = JSON.parse(output) as ActualAggregatedResult
       return {
         ...results,
         json: normalizeResults(json),
       }
     } catch (error) {
-      console.error(`Failed to parse jest output: ${results.stdout}`)
+      console.error(`Failed to parse jest output: ${output}`)
       throw error
     }
   }

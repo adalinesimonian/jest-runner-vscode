@@ -10,6 +10,7 @@ node_modules
 # build artifacts
 /dist
 tsconfig.tsbuildinfo
+e2e/**/jest-output.json
 e2e/**/yarn.lock
 e2e/**/.pnp.*
 e2e/**/.vscode-test
