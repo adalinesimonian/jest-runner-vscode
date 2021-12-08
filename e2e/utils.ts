@@ -104,17 +104,16 @@ export async function runJest(
     timeout: 30000,
     reject: false,
   })
-  const jestOutput = results.stdout.match(/\n?[^\n]+\n*$/)?.[0]
 
-  if (jestOutput) {
+  if (results.stdout) {
     try {
-      const json = JSON.parse(jestOutput) as ActualAggregatedResult
+      const json = JSON.parse(results.stdout) as ActualAggregatedResult
       return {
         ...results,
         json: normalizeResults(json),
       }
     } catch (error) {
-      console.error(`Failed to parse jest output: ${jestOutput}`)
+      console.error(`Failed to parse jest output: ${results.stdout}`)
       throw error
     }
   }
