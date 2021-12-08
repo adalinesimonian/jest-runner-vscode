@@ -15,7 +15,7 @@ describe('Passing tests', () => {
       console.error('stdout', stdout)
     }
     expect(json).toMatchSnapshot()
-    expect(stdout).toContain('This message was logged from the test file')
+    expect(stderr).toContain('This message was logged from the test file')
     expect(exitCode).toBe(0)
   }, 45000)
 })

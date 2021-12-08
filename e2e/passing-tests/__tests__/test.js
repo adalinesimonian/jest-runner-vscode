@@ -8,8 +8,8 @@ describe('Describe', () => {
     expect(true).toBe(true)
   })
 
-  it('should test with console.log', () => {
-    console.log('This message was logged from the test file')
+  it('should test with logs', () => {
+    console.error('This message was logged from the test file')
     expect(true).toBe(true)
   })
 })
