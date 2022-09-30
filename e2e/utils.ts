@@ -24,17 +24,17 @@ function sortByProperty<T>(property: keyof T): (a: T, b: T) => number {
 
 function normalizeMessages<T>(obj: T): T {
   if (obj && typeof obj === 'object') {
-    const objAsAny = obj
+    const objAsObj = obj as { [key in keyof T]: unknown }
     const keys = Object.getOwnPropertyNames(obj) as (keyof T)[]
     keys.forEach(key => {
-      const value = objAsAny[key] as unknown
+      const value = objAsObj[key]
 
       if (key === 'failureMessage' || key === 'message') {
-        objAsAny[key] = '' as unknown as T[keyof T]
+        objAsObj[key] = ''
       } else if (key === 'failureMessages' && Array.isArray(value)) {
-        objAsAny[key] = value.map(() => '') as unknown as T[keyof T]
+        objAsObj[key] = value.map(() => '')
       } else {
-        objAsAny[key] = normalizeMessages(value) as T[keyof T]
+        objAsObj[key] = normalizeMessages(value)
       }
     })
   }
