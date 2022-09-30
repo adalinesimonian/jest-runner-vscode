@@ -1,5 +1,8 @@
 {
-  "editor.rulers": [80, 120],
+  "editor.rulers": [
+    80,
+    120
+  ],
   "search.exclude": {
     ".yarn": true,
     "dist": true,
