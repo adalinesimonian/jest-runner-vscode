@@ -6,9 +6,9 @@ describe('Describe', () => {
   // eslint-disable-next-line @typescript-eslint/require-await
   it('should test async', async () => {
     expect({ x: 5 }).toMatchInlineSnapshot(`
-Object {
-  "x": 5,
-}
-`)
+      {
+        "x": 5,
+      }
+    `)
   })
 })

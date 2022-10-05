@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Tests that call VS Code commands should pass tests 1`] = `
-Object {
+{
   "numFailedTestSuites": 0,
   "numFailedTests": 0,
   "numPassedTestSuites": 1,
@@ -12,33 +12,34 @@ Object {
   "numTodoTests": 0,
   "numTotalTestSuites": 1,
   "numTotalTests": 1,
-  "openHandles": Array [],
-  "snapshot": Object {
+  "openHandles": [],
+  "snapshot": {
     "added": 0,
     "didUpdate": false,
     "failure": false,
     "filesAdded": 0,
     "filesRemoved": 0,
-    "filesRemovedList": Array [],
+    "filesRemovedList": [],
     "filesUnmatched": 0,
     "filesUpdated": 0,
     "matched": 2,
     "total": 2,
     "unchecked": 0,
-    "uncheckedKeysByFile": Array [],
+    "uncheckedKeysByFile": [],
     "unmatched": 0,
     "updated": 0,
   },
   "startTime": undefined,
   "success": true,
-  "testResults": Array [
-    Object {
-      "assertionResults": Array [
-        Object {
-          "ancestorTitles": Array [
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
             "Describe",
           ],
-          "failureMessages": Array [],
+          "duration": undefined,
+          "failureMessages": [],
           "fullName": "Describe should test",
           "location": null,
           "status": "passed",

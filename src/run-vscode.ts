@@ -1,10 +1,10 @@
 import type { RemoteTestOptions } from './types'
 import type { TestResult, SerializableError } from '@jest/test-result'
-import type { Test } from '@jest/reporters/build/types'
+import type { Test } from '@jest/test-result'
 import type * as JestRunner from 'jest-runner'
 import cp from 'child_process'
 import console from 'console'
-import type { IPC } from 'node-ipc'
+import type { IPC } from '@achrinza/node-ipc'
 import { Config } from '@jest/types'
 
 export type RunVSCodeOptions = {

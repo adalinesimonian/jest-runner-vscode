@@ -1,11 +1,11 @@
 import type net from 'net'
 import path from 'path'
 import Message from 'js-message'
-import type { IPC } from 'node-ipc'
+import type { IPC } from '@achrinza/node-ipc'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
 const EventParser = require(path.resolve(
-  path.dirname(require.resolve('node-ipc')),
+  path.dirname(require.resolve('@achrinza/node-ipc')),
   'entities/EventParser'
 )) as new (config: InstanceType<typeof IPC>['config']) => {
   format: (message: Message) => string

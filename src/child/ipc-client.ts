@@ -1,6 +1,6 @@
 import console from 'console'
 import EventEmitter from 'events'
-import { IPC } from 'node-ipc'
+import { IPC } from '@achrinza/node-ipc'
 import MessageWriter from './message-writer'
 
 export default class IPCClient {

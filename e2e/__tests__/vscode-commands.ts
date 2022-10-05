@@ -5,7 +5,7 @@ const testPath = path.resolve(__dirname, '../vscode-commands')
 
 beforeAll(async () => {
   await prepareDir(testPath)
-}, 10000)
+}, 45000)
 
 describe('Tests that call VS Code commands', () => {
   it('should pass tests', async () => {

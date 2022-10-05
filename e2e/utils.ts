@@ -8,7 +8,6 @@ import type {
 } from '@jest/test-result'
 
 const rootDir = path.resolve(__dirname, '..')
-const vscodeTestDir = path.resolve(rootDir, '.vscode-test')
 
 function sortByProperty<T>(property: keyof T): (a: T, b: T) => number {
   return (a, b) => {
@@ -65,9 +64,12 @@ function normalizeResults(
   const clean = Object.assign({}, results, {
     testResults: results.testResults.sort(sortByProperty('name')).map(result =>
       Object.assign({}, result, {
-        assertionResults: result.assertionResults.sort(
-          sortByProperty('fullName')
-        ),
+        assertionResults: result.assertionResults
+          .sort(sortByProperty('fullName'))
+          .map(assertionResult => ({
+            ...assertionResult,
+            duration: undefined,
+          })),
         failureMessage: result.failureMessage,
         name: normalizePath(result.name),
         startTime: undefined,
@@ -79,19 +81,16 @@ function normalizeResults(
   return normalizeMessages(clean)
 }
 
+/**
+ * Installs dependencies in the given directory using `yarn --immutable`.
+ * @param cwd The directory to prepare.
+ */
 export async function prepareDir(cwd: string): Promise<void> {
-  await fs.ensureDir(vscodeTestDir)
-  await fs.ensureSymlink(
-    path.relative(cwd, vscodeTestDir),
-    path.resolve(cwd, '.vscode-test'),
-    'dir'
-  )
-  await fs.ensureFile(path.resolve(cwd, 'yarn.lock'))
-  await fs.symlink(
-    path.resolve(__dirname, '../.pnp.cjs'),
-    path.resolve(cwd, '.pnp.cjs'),
-    'file'
-  )
+  const relative = path.relative(rootDir, cwd)
+
+  process.stdout.write(`Installing dependencies in ${relative}...\n`)
+  await execa('yarn', ['--immutable'], { cwd })
+  process.stdout.write(`Dependencies installed in ${relative}.\n`)
 }
 
 async function gracefulReadFile(file: string): Promise<string> {
@@ -107,14 +106,9 @@ export async function runJest(
   args: string[] = []
 ): Promise<execa.ExecaChildProcess & Promise<{ json: unknown }>> {
   const results = await execa(
-    'jest',
-    ['--json', '--outputFile', 'jest-output.json', ...args],
-    {
-      cwd,
-      preferLocal: true,
-      timeout: 30000,
-      reject: false,
-    }
+    'yarn',
+    ['jest', '--json', '--outputFile', 'jest-output.json', ...args],
+    { cwd, timeout: 30000, reject: false }
   )
   const outputFile = path.resolve(cwd, 'jest-output.json')
   const output = await gracefulReadFile(outputFile)

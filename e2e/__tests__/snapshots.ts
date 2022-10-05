@@ -5,7 +5,7 @@ const testPath = path.resolve(__dirname, '../snapshots')
 
 beforeAll(async () => {
   await prepareDir(testPath)
-}, 10000)
+}, 45000)
 
 describe('Snapshot tests', () => {
   it('should pass tests', async () => {

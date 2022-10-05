@@ -2,17 +2,17 @@
 
 exports[`Describe should test 1`] = `
 "{
-  \\"x\\": 5
+  "x": 5
 }
 "
 `;
 
 exports[`Describe should test 2`] = `
 "{
-  \\"x\\": 5
+  "x": 5
 }
 {
-  \\"x\\": 5
+  "x": 5
 }
 "
 `;

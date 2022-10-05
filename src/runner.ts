@@ -1,6 +1,6 @@
 import type { Config } from '@jest/types'
 import type * as JestRunner from 'jest-runner'
-import { IPC } from 'node-ipc'
+import { IPC } from '@achrinza/node-ipc'
 import type { RunnerOptions } from './types'
 import path from 'path'
 import process from 'process'

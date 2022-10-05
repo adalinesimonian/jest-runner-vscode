@@ -7,7 +7,7 @@ import type {
   ReporterOnStartOptions,
   Test,
   Reporter,
-  Context,
+  TestContext,
 } from '@jest/reporters'
 import IPCClient from './ipc-client'
 import wrapIO from './wrap-io'
@@ -77,7 +77,7 @@ export default class ChildReporter implements Reporter {
   }
 
   async onRunComplete(
-    contexts: Set<Context>,
+    contexts: Set<TestContext>,
     results: AggregatedResult
   ): Promise<void> {
     this.#ipc.emit('runComplete', { contexts, results })
