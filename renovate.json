@@ -1,4 +1,5 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base"],
   "packageRules": [
     {
@@ -21,5 +22,10 @@
       "matchPackageNames": ["execa"],
       "allowedVersions": "^5.0.0"
     }
-  ]
+  ],
+  "force": {
+    "constraints": {
+      "node": "16.14.2"
+    }
+  }
 }
