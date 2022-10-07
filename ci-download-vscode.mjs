@@ -2,7 +2,7 @@ import path from 'path'
 import url from 'url'
 import { cosmiconfig } from 'cosmiconfig'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
+// @ts-ignore
 import downloadVSCode from './packages/jest-runner-vscode/dist/download-vscode.js'
 
 const e2ePath = path.resolve(
