@@ -2,7 +2,7 @@
 
 [![Build Status](https://github.com/adalinesimonian/jest-runner-vscode/actions/workflows/main-test.yml/badge.svg?branch=main)][build status] [![npm Version](https://img.shields.io/npm/v/jest-runner-vscode.svg)][npm] [![Change Log](https://img.shields.io/badge/Change%20Log-grey.svg)][change log]
 
-Runs extension tests in [VS Code] using [Jest].
+Runs extension tests in [VS Code] using [Jest]. _Used by the official [Stylelint VS Code extension]!_
 
 > **Note**: This runner is in its early stages of development and is subject to change. Contributions and suggestions are welcome!
 
@@ -12,7 +12,7 @@ Runs extension tests in [VS Code] using [Jest].
 
 ## Installation
 
-Requires [Node.js] 14.x or later. Project is tested on VS Code 1.56.2.
+Requires [Node.js] 16.14 or later. Project is tested on VS Code 1.71.1.
 
 ```shell
 $ yarn add -D jest-runner-vscode
@@ -41,7 +41,7 @@ module.exports = {
 
 /** @type {import('jest-runner-vscode').RunnerOptions} */
 module.exports = {
-  version: '1.56.2',
+  version: '1.71.1',
   extensionTestsEnv: {
     FOO_BAR: 'baz',
   },
@@ -82,6 +82,7 @@ Configuration files in nested folders inherit the parent folder's configuration.
 [npm]: https://www.npmjs.com/package/jest-runner-vscode
 [change log]: CHANGELOG.md
 [vs code]: https://code.visualstudio.com/
+[stylelint vs code extension]: https://github.com/stylelint/vscode-stylelint
 [jest]: https://jestjs.io/
 [vscode-jest-test-runner]: https://github.com/bmealhouse/vscode-jest-test-runner
 [node.js]: https://nodejs.org/

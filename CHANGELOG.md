@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [v3.0.0](https://github.com/adalinesimonian/jest-runner-vscode/compare/v2.2.0...v3.0.0) (2022-10-07)
+
+### Breaking Changes
+
+- Dropped support for Node.js 14.x and 16.13.x, VS Code <1.71.0, and Jest <29.0.0. ([`f779c3a`](http://github.com/adalinesimonian/jest-runner-vscode/commit/f779c3a))
+
+### Changed
+
+- The VS Code extension host is no longer killed when the test run is finished. ([`91d6743`](http://github.com/adalinesimonian/jest-runner-vscode/commit/91d6743))
+- The package now specifies to Yarn that it should be unplugged to allow VS Code to start using the package's entry point in a PnP environment. ([`bf17692`](http://github.com/adalinesimonian/jest-runner-vscode/commit/bf17692))
+
 ## [v2.2.0](https://github.com/adalinesimonian/jest-runner-vscode/compare/v2.1.0...v2.2.0) (2021-12-07)
 
 ### Added
