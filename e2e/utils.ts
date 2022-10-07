@@ -81,18 +81,6 @@ function normalizeResults(
   return normalizeMessages(clean)
 }
 
-/**
- * Installs dependencies in the given directory using `yarn --immutable`.
- * @param cwd The directory to prepare.
- */
-export async function prepareDir(cwd: string): Promise<void> {
-  const relative = path.relative(rootDir, cwd)
-
-  process.stdout.write(`Installing dependencies in ${relative}...\n`)
-  await execa('yarn', ['--immutable'], { cwd })
-  process.stdout.write(`Dependencies installed in ${relative}.\n`)
-}
-
 async function gracefulReadFile(file: string): Promise<string> {
   try {
     return await fs.readFile(file, 'utf8')
@@ -108,7 +96,13 @@ export async function runJest(
   const results = await execa(
     'yarn',
     ['jest', '--json', '--outputFile', 'jest-output.json', ...args],
-    { cwd, timeout: 30000, reject: false }
+    {
+      cwd,
+      timeout: 30000,
+      reject: false,
+      stdout: 'inherit',
+      stdin: 'inherit',
+    }
   )
   const outputFile = path.resolve(cwd, 'jest-output.json')
   const output = await gracefulReadFile(outputFile)

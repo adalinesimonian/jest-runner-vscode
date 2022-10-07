@@ -58,19 +58,5 @@
     "spaced-comment": ["error", "always"],
     "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/no-explicit-any": "off"
-  },
-  "overrides": [
-    {
-      "files": ["e2e/**/*"],
-      "env": {
-        "jest": true
-      }
-    },
-    {
-      "files": ["e2e/**/*.js"],
-      "rules": {
-        "@typescript-eslint/no-var-requires": "off"
-      }
-    }
-  ]
+  }
 }

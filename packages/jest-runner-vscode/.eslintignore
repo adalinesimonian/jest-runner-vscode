@@ -9,8 +9,5 @@ dist
 # invalid e2e tests
 e2e/failing-tests/__tests__/invalid.js
 
-# e2e test output
-e2e/**/jest-output.json
-
 # vscode binaries
 .vscode-test

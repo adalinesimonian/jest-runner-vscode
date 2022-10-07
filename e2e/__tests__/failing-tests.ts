@@ -1,11 +1,7 @@
 import path from 'path'
-import { runJest, prepareDir } from '../utils'
+import { runJest } from '../utils'
 
 const testPath = path.resolve(__dirname, '../failing-tests')
-
-beforeAll(async () => {
-  await prepareDir(testPath)
-}, 45000)
 
 describe('Failing tests', () => {
   it('should fail tests', async () => {

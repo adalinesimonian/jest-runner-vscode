@@ -1,11 +1,7 @@
 import path from 'path'
-import { runJest, prepareDir } from '../utils'
+import { runJest } from '../utils'
 
 const testPath = path.resolve(__dirname, '../vscode-commands')
-
-beforeAll(async () => {
-  await prepareDir(testPath)
-}, 45000)
 
 describe('Tests that call VS Code commands', () => {
   it('should pass tests', async () => {
