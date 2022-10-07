@@ -34,21 +34,21 @@
     "node": ">=16.14.2"
   },
   "dependencies": {
-    "@achrinza/node-ipc": "^9.2.5",
-    "@jest/reporters": "^29.1.2",
-    "@jest/test-result": "^29.1.2",
-    "@jest/types": "^29.1.2",
-    "@vscode/test-electron": "^2.1.5",
-    "cosmiconfig": "^7.0.1",
-    "jest-cli": "^29.1.2",
-    "jest-environment-node": "^29.1.2",
-    "jest-runner": "^29.1.2",
-    "js-message": "^1.0.7"
+    "@achrinza/node-ipc": "9.2.5",
+    "@jest/reporters": "29.1.2",
+    "@jest/test-result": "29.1.2",
+    "@jest/types": "29.1.2",
+    "@vscode/test-electron": "2.1.5",
+    "cosmiconfig": "7.0.1",
+    "jest-cli": "29.1.2",
+    "jest-environment-node": "29.1.2",
+    "jest-runner": "29.1.2",
+    "js-message": "1.0.7"
   },
   "devDependencies": {
-    "@jest/transform": "^29.1.2",
+    "@jest/transform": "29.1.2",
     "@types/achrinza__node-ipc": "npm:@types/node-ipc@9.2.0",
-    "@types/babel__core": "^7.1.19",
+    "@types/babel__core": "7.1.19",
     "@types/fs-extra": "9.0.13",
     "@types/istanbul-lib-coverage": "2.0.3",
     "@types/jest": "29.1.1",
