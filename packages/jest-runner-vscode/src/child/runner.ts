@@ -1,7 +1,6 @@
 import type { RemoteTestOptions } from '../types'
 import { runCLI } from '@jest/core'
 import type { Config } from '@jest/types'
-import vscode from 'vscode'
 import path from 'path'
 import process from 'process'
 import IPCClient from './ipc-client'

@@ -5,7 +5,7 @@ import { Global } from '@jest/types'
 
 export default function wrapIO(
   client: IPCClient,
-  globalObject: (NodeJS.Global & typeof globalThis) | Global.Global = global
+  globalObject: typeof globalThis | Global.Global = global
 ) {
   const consolePrintMethods: (keyof Console)[] = [
     'log',

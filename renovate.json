@@ -3,14 +3,18 @@
   "packageRules": [
     {
       "matchPackageNames": ["@types/node"],
-      "allowedVersions": "14.14.45 - 14.16.0"
+      "allowedVersions": "16.11.64 - 16.14.2"
     },
     {
       "matchPackageNames": ["@types/vscode"],
-      "allowedVersions": "~1.56.0"
+      "allowedVersions": "~1.71.0"
     },
     {
-      "matchPackageNames": ["node-ipc", "@types/node-ipc"],
+      "matchPackageNames": [
+        "@achrinza/node-ipc",
+        "@types/node-ipc",
+        "@types/achrinza__node-ipc"
+      ],
       "allowedVersions": "^9.0.0"
     },
     {
