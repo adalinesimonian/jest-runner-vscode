@@ -1124,10 +1124,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/istanbul-lib-coverage@npm:*, @types/istanbul-lib-coverage@npm:2.0.3, @types/istanbul-lib-coverage@npm:^2.0.0, @types/istanbul-lib-coverage@npm:^2.0.1":
+"@types/istanbul-lib-coverage@npm:*, @types/istanbul-lib-coverage@npm:^2.0.0, @types/istanbul-lib-coverage@npm:^2.0.1":
   version: 2.0.3
   resolution: "@types/istanbul-lib-coverage@npm:2.0.3"
   checksum: 0650cba4be8f464bee89b9de0b71a5ea3b5cc676ce24e1196b5d6a51542ce9e613ae4549bf19756bb33dbbbb32b47931040266100062bfb197c597d73e341eb0
+  languageName: node
+  linkType: hard
+
+"@types/istanbul-lib-coverage@npm:2.0.4":
+  version: 2.0.4
+  resolution: "@types/istanbul-lib-coverage@npm:2.0.4"
+  checksum: a25d7589ee65c94d31464c16b72a9dc81dfa0bea9d3e105ae03882d616e2a0712a9c101a599ec482d297c3591e16336962878cb3eb1a0a62d5b76d277a890ce7
   languageName: node
   linkType: hard
 
@@ -3505,7 +3512,7 @@ fsevents@^2.3.2:
     "@types/achrinza__node-ipc": "npm:@types/node-ipc@9.2.0"
     "@types/babel__core": ^7.1.19
     "@types/fs-extra": 9.0.13
-    "@types/istanbul-lib-coverage": 2.0.3
+    "@types/istanbul-lib-coverage": 2.0.4
     "@types/jest": 29.1.1
     "@types/node": 14.14.45
     "@types/vscode": 1.56.0
@@ -3545,7 +3552,7 @@ fsevents@^2.3.2:
     "@jest/types": ^29.1.2
     "@types/achrinza__node-ipc": "npm:@types/node-ipc@9.2.0"
     "@types/fs-extra": 9.0.13
-    "@types/istanbul-lib-coverage": 2.0.3
+    "@types/istanbul-lib-coverage": 2.0.4
     "@types/jest": 29.1.1
     "@types/node": 14.14.45
     "@types/vscode": 1.56.0
