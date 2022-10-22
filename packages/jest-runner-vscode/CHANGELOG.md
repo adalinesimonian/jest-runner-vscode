@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [v3.0.1](https://github.com/adalinesimonian/jest-runner-vscode/compare/v3.0.0...v3.0.1) (2022-10-22)
+
+### Fixed
+
+- Non-Yarn workspaces no longer result in a stall due to an infinite loop. ([`af87fa7`](https://github.com/adalinesimonian/jest-runner-vscode/commit/af87fa7))
+- Corrected path to `buildArgv` function in `jest-cli` dependency after it was moved in Jest 29.2.1. ([`7ac716a`](https://github.com/adalinesimonian/jest-runner-vscode/commit/7ac716a))
+
 ## [v3.0.0](https://github.com/adalinesimonian/jest-runner-vscode/compare/v2.2.0...v3.0.0) (2022-10-07)
 
 ### Breaking Changes
