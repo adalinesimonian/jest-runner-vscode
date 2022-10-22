@@ -1,6 +1,6 @@
 {
   "name": "jest-runner-vscode",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Jest runner for testing VS Code extensions",
   "author": {
     "name": "Adaline Simonian",
