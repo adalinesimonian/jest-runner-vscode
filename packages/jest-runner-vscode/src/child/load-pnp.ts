@@ -19,7 +19,14 @@ async function findPackageRoot(start: string): Promise<string | undefined> {
     } catch {
       // ignore
     }
-    current = path.dirname(current)
+
+    const newPath = path.dirname(current)
+
+    if (newPath === current) {
+      break
+    }
+
+    current = newPath
   }
   return undefined
 }
