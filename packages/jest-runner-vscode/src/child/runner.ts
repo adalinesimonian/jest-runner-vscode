@@ -11,7 +11,7 @@ const moduleNameMapper = JSON.stringify({ '^vscode$': vscodeModulePath })
 
 const jestCliPath = require.resolve('jest-cli')
 // eslint-disable-next-line @typescript-eslint/no-var-requires, global-require
-const { buildArgv } = require(path.join(jestCliPath, '../cli')) as {
+const { buildArgv } = require(path.join(jestCliPath, '../run')) as {
   buildArgv: (maybeArgv?: Array<string>) => Promise<Config.Argv>
 }
 
