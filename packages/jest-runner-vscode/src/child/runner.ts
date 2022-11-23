@@ -23,11 +23,16 @@ export async function run(): Promise<void> {
   )
 
   try {
-    const { PARENT_JEST_OPTIONS } = process.env
+    const { PARENT_JEST_OPTIONS, PARENT_CWD } = process.env
 
     if (!PARENT_JEST_OPTIONS) {
       throw new Error('PARENT_JEST_OPTIONS is not defined')
     }
+
+    if (PARENT_CWD) {
+      process.chdir(PARENT_CWD)
+    }
+
     const options = JSON.parse(PARENT_JEST_OPTIONS) as RemoteTestOptions
     const jestOptions = [
       ...options.args,
