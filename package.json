@@ -48,7 +48,7 @@
   "devDependencies": {
     "@jest/transform": "29.1.2",
     "@types/achrinza__node-ipc": "npm:@types/node-ipc@9.2.0",
-    "@types/babel__core": "7.1.19",
+    "@types/babel__core": "7.20.5",
     "@types/fs-extra": "9.0.13",
     "@types/istanbul-lib-coverage": "2.0.4",
     "@types/jest": "29.1.2",
