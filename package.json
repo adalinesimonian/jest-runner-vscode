@@ -38,7 +38,7 @@
     "@jest/reporters": "29.1.2",
     "@jest/test-result": "29.1.2",
     "@jest/types": "29.1.2",
-    "@vscode/test-electron": "2.1.5",
+    "@vscode/test-electron": "2.4.1",
     "cosmiconfig": "7.0.1",
     "jest-cli": "29.1.2",
     "jest-environment-node": "29.1.2",
