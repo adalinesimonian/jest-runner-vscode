@@ -34,7 +34,7 @@
     "node": ">=16.14.2"
   },
   "dependencies": {
-    "@achrinza/node-ipc": "9.2.5",
+    "@achrinza/node-ipc": "9.2.9",
     "@jest/reporters": "29.1.2",
     "@jest/test-result": "29.1.2",
     "@jest/types": "29.1.2",
